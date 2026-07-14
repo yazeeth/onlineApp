@@ -1,11 +1,12 @@
 import app from "./app";
+import dotenv from "dotenv";
 
-console.log("Starting server file...");
+dotenv.config();
 
-const PORT = 5050;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-console.log("After listen command...");
+console.log("Server object created:", server.address());
