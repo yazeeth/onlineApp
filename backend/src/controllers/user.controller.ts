@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prisma from "../config/database";
+import { createUser } from "../services/user.service";
 
 
 export const registerUser = async (
@@ -9,17 +9,20 @@ export const registerUser = async (
 
     try {
 
-        const { name, email, phone, password } = req.body;
+        const {
+            name,
+            email,
+            phone,
+            password
+        } = req.body;
 
 
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                phone,
-                password
-            }
-        });
+        const user = await createUser(
+            name,
+            email,
+            phone,
+            password
+        );
 
 
         res.status(201).json({
@@ -31,8 +34,7 @@ export const registerUser = async (
     } catch (error) {
 
         res.status(500).json({
-            message: "Error creating user",
-            error
+            message: "Error creating user"
         });
 
     }
