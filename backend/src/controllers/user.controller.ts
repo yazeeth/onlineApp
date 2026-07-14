@@ -31,12 +31,14 @@ export const registerUser = async (
         });
 
 
-    } catch (error) {
+    } catch (error: any) {
 
-        res.status(500).json({
-            message: "Error creating user"
+        res.status(400).json({
+            message: error.message
         });
 
     }
+
+
 
 };

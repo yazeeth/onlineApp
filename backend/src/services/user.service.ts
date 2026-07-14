@@ -10,6 +10,18 @@ export const createUser = async (
 ) => {
 
 
+    const existingUser = await prisma.user.findUnique({
+        where: {
+            email
+        }
+    });
+
+
+    if (existingUser) {
+        throw new Error("Email already registered");
+    }
+
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
 
@@ -22,6 +34,6 @@ export const createUser = async (
         }
     });
 
-
-    return user;
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
 };
