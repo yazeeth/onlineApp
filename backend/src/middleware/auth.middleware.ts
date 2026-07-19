@@ -15,7 +15,7 @@ export const authMiddleware = (
 
         if (!authHeader) {
             return res.status(401).json({
-                message:"No token provided"
+                message: "No token provided"
             });
         }
 
@@ -25,11 +25,15 @@ export const authMiddleware = (
 
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET!
+            process.env.JWT_ACCESS_SECRET!
         );
 
 
-        req.user = decoded;
+        req.user = decoded as {
+            userId: number;
+            email: string;
+            role: string;
+        };
 
 
         next();
@@ -38,7 +42,7 @@ export const authMiddleware = (
     } catch(error) {
 
         return res.status(401).json({
-            message:"Invalid token"
+            message: "Invalid token"
         });
 
     }
