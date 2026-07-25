@@ -7,16 +7,17 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  name          String
-  email         String         @unique
-  phone         String?
-  password      String
-  role          String         @default("CUSTOMER")
-  createdAt     DateTime       @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String?
+  password  String
+  role      String   @default("CUSTOMER")
+  createdAt DateTime @default(now())
 
   refreshTokens RefreshToken[]
   cart          Cart?
+  orders        Order[]
 }
 
 model RefreshToken {
@@ -49,7 +50,8 @@ model Product {
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  cartItems CartItem[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
 }
 
 model Cart {
@@ -69,6 +71,32 @@ model CartItem {
   quantity  Int @default(1)
 
   cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  status      String   @default("PENDING")
+  totalAmount Float
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId   Int
+  productId Int
+
+  quantity Int
+  price    Float
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
