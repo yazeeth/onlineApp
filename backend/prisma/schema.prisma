@@ -75,10 +75,19 @@ model CartItem {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model Order {
   id          Int      @id @default(autoincrement())
   userId      Int
-  status      String   @default("PENDING")
+  status OrderStatus @default(PENDING)
   totalAmount Float
   createdAt   DateTime @default(now())
 

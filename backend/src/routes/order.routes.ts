@@ -1,14 +1,9 @@
 import { Router } from "express";
-
-import {
-    checkout
-} from "../controllers/order.controller";
-
+import { checkout, getOrders, getSingleOrder, getAllOrdersAdmin, changeOrderStatus } from "../controllers/order.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
-
+import { requireAdmin } from "../middleware/role.middleware";
 
 const router = Router();
-
 
 router.post(
     "/checkout",
@@ -16,5 +11,30 @@ router.post(
     checkout
 );
 
+router.get(
+    "/",
+    authMiddleware,
+    getOrders
+);
+
+router.get(
+    "/admin/all",
+    authMiddleware,
+    requireAdmin,
+    getAllOrdersAdmin
+);
+
+router.put(
+    "/:id/status",
+    authMiddleware,
+    requireAdmin,
+    changeOrderStatus
+);
+
+router.get(
+    "/:id",
+    authMiddleware,
+    getSingleOrder
+);
 
 export default router;

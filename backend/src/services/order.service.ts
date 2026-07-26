@@ -88,3 +88,86 @@ export const getUserOrders = async (
     return orders;
 
 };
+
+export const getOrderById = async (
+    orderId: number,
+    userId: number
+) => {
+
+    const order = await prisma.order.findFirst({
+
+        where: {
+            id: orderId,
+            userId
+        },
+
+        include: {
+            items: {
+                include: {
+                    product: true
+                }
+            }
+        }
+
+    });
+
+
+    if (!order) {
+        throw new Error("Order not found");
+    }
+
+
+    return order;
+
+};
+
+export const getAllOrders = async () => {
+
+    const orders = await prisma.order.findMany({
+
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true
+                }
+            },
+
+            items: {
+                include: {
+                    product: true
+                }
+            }
+        },
+
+        orderBy: {
+            createdAt: "desc"
+        }
+
+    });
+
+
+    return orders;
+
+};
+
+export const updateOrderStatus = async (
+    orderId: number,
+    status: any
+) => {
+
+    const order = await prisma.order.update({
+        where: {
+            id: orderId
+        },
+
+        data: {
+            status
+        }
+    });
+
+
+    return order;
+
+};
