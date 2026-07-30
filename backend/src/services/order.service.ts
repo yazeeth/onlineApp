@@ -1,4 +1,41 @@
+import { OrderStatus } from "@prisma/client";
 import prisma from "../config/database";
+
+const allowedOrderStatuses: OrderStatus[] = [
+    OrderStatus.PENDING,
+    OrderStatus.CONFIRMED,
+    OrderStatus.PROCESSING,
+    OrderStatus.SHIPPED,
+    OrderStatus.DELIVERED,
+    OrderStatus.CANCELLED
+];
+
+const orderStatusTransitions: Record<OrderStatus, OrderStatus[]> = {
+
+    PENDING: [
+        OrderStatus.CONFIRMED,
+        OrderStatus.CANCELLED
+    ],
+
+    CONFIRMED: [
+        OrderStatus.PROCESSING,
+        OrderStatus.CANCELLED
+    ],
+
+    PROCESSING: [
+        OrderStatus.SHIPPED,
+        OrderStatus.CANCELLED
+    ],
+
+    SHIPPED: [
+        OrderStatus.DELIVERED
+    ],
+
+    DELIVERED: [],
+
+    CANCELLED: []
+
+};
 
 export const createOrder = async (
     userId: number
@@ -23,6 +60,19 @@ export const createOrder = async (
         throw new Error("Cart is empty");
     }
 
+    // Check stock availability
+    for (const item of cart.items) {
+
+        if (item.quantity > item.product.stock) {
+
+            throw new Error(
+                `${item.product.name} has only ${item.product.stock} item(s) in stock`
+            );
+
+        }
+
+    }
+
     // Calculate total
     let totalAmount = 0;
 
@@ -37,7 +87,7 @@ export const createOrder = async (
         data: {
             userId,
             totalAmount,
-            status: "PENDING",
+            status: OrderStatus.PENDING,
             items: {
                 create: cart.items.map((item) => ({
                     productId: item.productId,
@@ -52,8 +102,24 @@ export const createOrder = async (
         }
     });
 
-    // Clear cart after checkout
+    // Reduce product stock
+    for (const item of cart.items) {
 
+        await prisma.product.update({
+            where: {
+                id: item.productId
+            },
+
+            data: {
+                stock: {
+                    decrement: item.quantity
+                }
+            }
+        });
+
+    }
+
+    // Clear cart after checkout
     await prisma.cartItem.deleteMany({
         where: {
             cartId: cart.id
@@ -154,10 +220,37 @@ export const getAllOrders = async () => {
 
 export const updateOrderStatus = async (
     orderId: number,
-    status: any
+    status: OrderStatus
 ) => {
 
+    if (!allowedOrderStatuses.includes(status)) {
+        throw new Error("Invalid order status");
+    }
+
+
+    const existingOrder = await prisma.order.findUnique({
+        where: {
+            id: orderId
+        }
+    });
+
+
+    if (!existingOrder) {
+        throw new Error("Order not found");
+    }
+
+    const currentStatus = existingOrder.status;
+
+    if (
+        !orderStatusTransitions[currentStatus].includes(status)
+    ) {
+        throw new Error(
+            `Cannot change order status from ${currentStatus} to ${status}`
+        );
+    }
+
     const order = await prisma.order.update({
+
         where: {
             id: orderId
         },
@@ -165,9 +258,11 @@ export const updateOrderStatus = async (
         data: {
             status
         }
+
     });
 
 
     return order;
 
 };
+
