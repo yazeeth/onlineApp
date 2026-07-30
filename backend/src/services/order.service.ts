@@ -83,47 +83,52 @@ export const createOrder = async (
     }
 
     // Create order
-    const order = await prisma.order.create({
-        data: {
-            userId,
-            totalAmount,
-            status: OrderStatus.PENDING,
-            items: {
-                create: cart.items.map((item) => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    price: item.product.price
-                }))
-            }
-        },
-
-        include: {
-            items: true
-        }
-    });
-
-    // Reduce product stock
-    for (const item of cart.items) {
-
-        await prisma.product.update({
-            where: {
-                id: item.productId
+    const order = await prisma.$transaction(async (tx) => {
+        const order = await tx.order.create({
+            data: {
+                userId,
+                totalAmount,
+                status: OrderStatus.PENDING,
+                items: {
+                    create: cart.items.map((item) => ({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        price: item.product.price
+                    }))
+                }
             },
 
-            data: {
-                stock: {
-                    decrement: item.quantity
-                }
+            include: {
+                items: true
             }
         });
 
-    }
+        // Reduce product stock
+        for (const item of cart.items) {
 
-    // Clear cart after checkout
-    await prisma.cartItem.deleteMany({
-        where: {
-            cartId: cart.id
+            await tx.product.update({
+                where: {
+                    id: item.productId
+                },
+
+                data: {
+                    stock: {
+                        decrement: item.quantity
+                    }
+                }
+            });
+
         }
+
+        // Clear cart after checkout
+        await tx.cartItem.deleteMany({
+            where: {
+                cartId: cart.id
+            }
+        });
+
+        return order;
+
     });
 
     return order;
