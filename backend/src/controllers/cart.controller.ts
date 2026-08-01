@@ -26,6 +26,19 @@ export const addCartItem = async (
         } = req.body;
 
 
+        if (!productId || !quantity) {
+            return res.status(400).json({
+                message: "Product ID and quantity are required"
+            });
+        }
+
+        if (quantity <= 0) {
+            return res.status(400).json({
+                message: "Quantity must be greater than zero"
+            });
+        }
+
+
 
         const item = await addToCart(
             userId,
@@ -112,10 +125,22 @@ export const editCartItem = async (
 
         const itemId = Number(req.params.id);
 
+        if (!itemId) {
+            return res.status(400).json({
+                message: "Invalid cart item ID"
+            });
+        }
+
 
         const {
             quantity
         } = req.body;
+
+        if (!quantity || quantity <= 0) {
+            return res.status(400).json({
+                message: "Quantity must be greater than zero"
+            });
+        }
 
 
 
@@ -174,6 +199,12 @@ export const deleteCartItem = async (
 
 
         const itemId = Number(req.params.id);
+
+        if (!itemId) {
+            return res.status(400).json({
+                message: "Invalid cart item ID"
+            });
+        }
 
 
 
