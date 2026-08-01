@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser } from "../services/user.service";
+import { createUser, updateUserRole } from "../services/user.service";
 import prisma from "../config/database";
 
 export const registerUser = async (
@@ -86,6 +86,30 @@ export const getProfile = async (
             message:"Server error"
         });
 
+    }
+
+};
+
+export const updateUserRoleController = async (
+    req: Request,
+    res: Response
+) => {
+
+    try {
+        const userId = Number(req.params.id);
+        const { role } = req.body;
+
+        const user = await updateUserRole(userId, role);
+
+        res.json({
+            message: "User role updated successfully",
+            user
+        });
+
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message
+        });
     }
 
 };
