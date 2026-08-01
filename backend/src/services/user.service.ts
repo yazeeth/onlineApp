@@ -43,3 +43,32 @@ export const createUser = async (
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
 };
+
+export const updateUserRole = async (
+    userId: number,
+    role: "ADMIN" | "CUSTOMER"
+) => {
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: {
+            role
+        }
+    });
+
+    const { password: _, ...userWithoutPassword } = updatedUser;
+
+    return userWithoutPassword;
+};
