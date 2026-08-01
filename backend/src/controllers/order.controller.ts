@@ -13,8 +13,11 @@ export const checkout = async (
         };
 
 
+        const { paymentMethod } = req.body;
+
         const order = await createOrder(
-            user.userId
+            user.userId,
+            paymentMethod
         );
 
 

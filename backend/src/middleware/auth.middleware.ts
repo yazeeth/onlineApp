@@ -20,12 +20,23 @@ export const authMiddleware = (
         }
 
 
-        const token = authHeader.split(" ")[1];
+        const parts = authHeader.split(" ");
+
+        if (parts.length !== 2 || parts[0] !== "Bearer") {
+            return res.status(401).json({
+                message: "Invalid authorization format"
+            });
+        }
+
+        const token = parts[1];
 
 
+        if (!process.env.JWT_ACCESS_SECRET) {
+            throw new Error("JWT secret missing");
+        }
         const decoded = jwt.verify(
             token,
-            process.env.JWT_ACCESS_SECRET!
+            process.env.JWT_ACCESS_SECRET
         );
 
 

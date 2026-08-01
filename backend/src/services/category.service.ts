@@ -5,9 +5,23 @@ export const createCategory = async (
     name: string
 ) => {
 
+    if (!name || !name.trim()) {
+        throw new Error("Category name is required");
+    }
+
+    const existingCategory = await prisma.category.findUnique({
+        where: {
+            name: name.trim()
+        }
+    });
+
+    if (existingCategory) {
+        throw new Error("Category already exists");
+    }
+
     const category = await prisma.category.create({
         data: {
-            name
+            name: name.trim()
         }
     });
 

@@ -1,4 +1,4 @@
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, PaymentMethod, PaymentStatus } from "@prisma/client";
 import prisma from "../config/database";
 
 const allowedOrderStatuses: OrderStatus[] = [
@@ -38,8 +38,13 @@ const orderStatusTransitions: Record<OrderStatus, OrderStatus[]> = {
 };
 
 export const createOrder = async (
-    userId: number
+    userId: number,
+    paymentMethod: PaymentMethod
 ) => {
+
+    if (!Object.values(PaymentMethod).includes(paymentMethod)) {
+        throw new Error("Invalid payment method");
+    }
 
     // Find user's cart
     const cart = await prisma.cart.findUnique({
@@ -100,6 +105,15 @@ export const createOrder = async (
 
             include: {
                 items: true
+            }
+        });
+
+        await tx.payment.create({
+            data: {
+                orderId: order.id,
+                amount: totalAmount,
+                method: paymentMethod,
+                status: PaymentStatus.PENDING
             }
         });
 
@@ -256,15 +270,41 @@ export const updateOrderStatus = async (
         );
     }
 
-    const order = await prisma.order.update({
+    const order = await prisma.$transaction(async (tx) => {
 
-        where: {
-            id: orderId
-        },
+        if (status === OrderStatus.CANCELLED) {
 
-        data: {
-            status
+            const orderItems = await tx.orderItem.findMany({
+                where: {
+                    orderId
+                }
+            });
+
+            for (const item of orderItems) {
+
+                await tx.product.update({
+                    where: {
+                        id: item.productId
+                    },
+                    data: {
+                        stock: {
+                            increment: item.quantity
+                        }
+                    }
+                });
+
+            }
+
         }
+
+        return await tx.order.update({
+            where: {
+                id: orderId
+            },
+            data: {
+                status
+            }
+        });
 
     });
 
@@ -272,4 +312,3 @@ export const updateOrderStatus = async (
     return order;
 
 };
-
