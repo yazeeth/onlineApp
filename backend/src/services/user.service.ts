@@ -34,6 +34,12 @@ export const createUser = async (
         }
     });
 
+    await prisma.cart.create({
+        data: {
+            userId: user.id
+        }
+    });
+
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
 };
