@@ -17,6 +17,20 @@ const router = Router();
 
 
 // Admin only - create product
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Create a product
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *       401:
+ *         description: Unauthorized
+ */
 router.post(
     "/",
     authMiddleware,
@@ -27,6 +41,16 @@ router.post(
 
 
 // Public - get products
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Get all products
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: List of products
+ */
 router.get(
     "/",
     getAllProducts
@@ -34,6 +58,22 @@ router.get(
 
 
 
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     summary: Get a single product
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Product details
+ */
 router.get(
     "/:id",
     getSingleProduct
@@ -42,6 +82,24 @@ router.get(
 
 
 // Admin only - update product
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   put:
+ *     summary: Update a product
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ */
 router.put(
     "/:id",
     authMiddleware,
@@ -52,6 +110,24 @@ router.put(
 
 
 // Admin only - delete product
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   delete:
+ *     summary: Delete a product
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Product deleted successfully
+ */
 router.delete(
     "/:id",
     authMiddleware,
