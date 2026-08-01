@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, updateUserRole } from "../services/user.service";
+import { createUser, updateUserRole, getAllUsers } from "../services/user.service";
 import prisma from "../config/database";
 
 export const registerUser = async (
@@ -108,6 +108,26 @@ export const updateUserRoleController = async (
 
     } catch (error: any) {
         res.status(400).json({
+            message: error.message
+        });
+    }
+
+};
+
+export const getAllUsersController = async (
+    req: Request,
+    res: Response
+) => {
+
+    try {
+        const users = await getAllUsers();
+
+        res.json({
+            users
+        });
+
+    } catch (error: any) {
+        res.status(500).json({
             message: error.message
         });
     }

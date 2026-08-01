@@ -72,3 +72,19 @@ export const updateUserRole = async (
 
     return userWithoutPassword;
 };
+
+export const getAllUsers = async () => {
+
+    const users = await prisma.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            role: true,
+            createdAt: true
+        }
+    });
+
+    return users;
+};

@@ -1,14 +1,13 @@
 import { Router } from "express";
-import { registerUser, getProfile, updateUserRoleController } from "../controllers/user.controller";
+import { registerUser, getProfile, updateUserRoleController, getAllUsersController } from "../controllers/user.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
-import { adminMiddleware } from "../middleware/admin.middleware";
+import { requireAdmin } from "../middleware/role.middleware";
 
 const router = Router();
 
 router.post("/register", registerUser);
-
 router.get("/profile", authMiddleware, getProfile);
-
-router.patch("/:id/role", authMiddleware, adminMiddleware, updateUserRoleController);
+router.get("/", authMiddleware, requireAdmin, getAllUsersController);
+router.patch("/:id/role", authMiddleware, requireAdmin, updateUserRoleController);
 
 export default router;
