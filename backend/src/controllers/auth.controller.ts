@@ -18,12 +18,10 @@ export const login = async (
             password
         } = req.body;
 
-
         const result = await loginUser(
             email,
             password
         );
-
 
         res.json({
             message: "Login successful",

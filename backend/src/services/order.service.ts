@@ -160,6 +160,8 @@ export const getUserOrders = async (
 
 };
 
+// NOTE: This function is for fetching ONE order by its orderId.
+// Do NOT use this for the /my-orders endpoint. That endpoint must call getUserOrders().
 export const getOrderById = async (
     orderId: number,
     userId: number

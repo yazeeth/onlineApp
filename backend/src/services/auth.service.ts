@@ -52,19 +52,14 @@ export const loginUser = async (
     });
 
 
-
     if (!user) {
         throw new Error("Invalid email or password");
     }
-
-
 
     const passwordMatch = await bcrypt.compare(
         password,
         user.password
     );
-
-
 
     if (!passwordMatch) {
         throw new Error("Invalid email or password");
@@ -83,8 +78,6 @@ export const loginUser = async (
 
     const refreshToken = generateRefreshToken();
 
-
-
     await prisma.refreshToken.create({
 
         data: {
@@ -101,8 +94,6 @@ export const loginUser = async (
         }
 
     });
-
-
 
     return {
 

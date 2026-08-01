@@ -12,7 +12,7 @@ router.post(
 );
 
 router.get(
-    "/",
+    "/my-orders",
     authMiddleware,
     getOrders
 );
