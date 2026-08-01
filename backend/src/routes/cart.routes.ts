@@ -22,9 +22,27 @@ const router = Router();
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - productId
+ *               - quantity
+ *             properties:
+ *               productId:
+ *                 type: integer
+ *                 example: 1
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       201:
  *         description: Item added to cart
+ *       400:
+ *         description: Invalid product or quantity
  *       401:
  *         description: Unauthorized
  */
@@ -47,6 +65,15 @@ router.post(
  *     responses:
  *       200:
  *         description: User cart details
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 1
+ *               items:
+ *                 - productId: 1
+ *                   quantity: 2
+ *       401:
+ *         description: Unauthorized
  */
 router.get(
     "/",
@@ -70,9 +97,23 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - quantity
+ *             properties:
+ *               quantity:
+ *                 type: integer
+ *                 example: 3
  *     responses:
  *       200:
  *         description: Cart item updated
+ *       400:
+ *         description: Invalid quantity
  */
 router.put(
     "/item/:id",
@@ -98,7 +139,9 @@ router.put(
  *           type: integer
  *     responses:
  *       200:
- *         description: Cart item removed
+ *         description: Cart item removed successfully
+ *       404:
+ *         description: Cart item not found
  */
 router.delete(
     "/item/:id",

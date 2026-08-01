@@ -19,9 +19,18 @@ const router = Router();
  *         required: true
  *         schema:
  *           type: integer
+ *         example: 1
  *     responses:
  *       200:
- *         description: Payment details
+ *         description: Payment details retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 1
+ *               orderId: 1
+ *               amount: 50000
+ *               method: COD
+ *               status: PENDING
  *       404:
  *         description: Payment not found
  */
@@ -35,15 +44,25 @@ router.get(
  * @swagger
  * /api/payments/admin/all:
  *   get:
- *     summary: Get all payments for admin
+ *     summary: Get all payments (Admin)
  *     tags: [Payments]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of all payments
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: 1
+ *                 orderId: 1
+ *                 amount: 50000
+ *                 method: BANK_TRANSFER
+ *                 status: PAID
  *       401:
  *         description: Unauthorized
+ *       403:
+ *         description: Admin access required
  */
 router.get(
     "/admin/all",
@@ -56,7 +75,7 @@ router.get(
  * @swagger
  * /api/payments/{id}/status:
  *   put:
- *     summary: Update payment status
+ *     summary: Update payment status (Admin)
  *     tags: [Payments]
  *     security:
  *       - bearerAuth: []
@@ -66,6 +85,23 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - PENDING
+ *                   - PAID
+ *                   - FAILED
+ *                 example: PAID
  *     responses:
  *       200:
  *         description: Payment status updated successfully

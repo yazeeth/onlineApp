@@ -32,6 +32,14 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Login successful
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Login successful
+ *               accessToken: eyJhbGciOiJIUzI1NiIs...
+ *               refreshToken: eyJhbGciOiJIUzI1NiIs...
+ *       400:
+ *         description: Invalid request
  *       401:
  *         description: Invalid credentials
  */
@@ -42,9 +50,23 @@ router.post("/login", login);
  *   post:
  *     summary: Refresh access token
  *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIs...
  *     responses:
  *       200:
  *         description: Token refreshed successfully
+ *       401:
+ *         description: Invalid refresh token
  */
 router.post("/refresh", refresh);
 /**
@@ -53,9 +75,13 @@ router.post("/refresh", refresh);
  *   post:
  *     summary: Logout user
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Logout successful
+ *       401:
+ *         description: Unauthorized
  */
 router.post("/logout", logout);
 

@@ -20,9 +20,32 @@ const router = Router();
  *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Electronics
+ *               description:
+ *                 type: string
+ *                 example: Mobile phones and electronic devices
  *     responses:
  *       201:
  *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 1
+ *               name: Electronics
+ *               description: Mobile phones and electronic devices
+ *       400:
+ *         description: Invalid category data
  *       401:
  *         description: Unauthorized
  */

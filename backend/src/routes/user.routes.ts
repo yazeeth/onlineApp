@@ -11,11 +11,31 @@ const router = Router();
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 example: john@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
  *     responses:
  *       201:
  *         description: User registered successfully
  *       400:
- *         description: Registration failed
+ *         description: Email already exists or invalid data
  */
 router.post("/register", registerUser);
 /**
@@ -29,6 +49,15 @@ router.post("/register", registerUser);
  *     responses:
  *       200:
  *         description: User profile details
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 1
+ *               name: John Doe
+ *               email: john@example.com
+ *               role: CUSTOMER
+ *       401:
+ *         description: Unauthorized
  */
 router.get("/profile", authMiddleware, getProfile);
 /**
@@ -42,6 +71,17 @@ router.get("/profile", authMiddleware, getProfile);
  *     responses:
  *       200:
  *         description: List of users
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: 1
+ *                 name: John Doe
+ *                 email: john@example.com
+ *                 role: CUSTOMER
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Admin access required
  */
 router.get("/", authMiddleware, requireAdmin, getAllUsersController);
 /**
@@ -58,9 +98,29 @@ router.get("/", authMiddleware, requireAdmin, getAllUsersController);
  *         required: true
  *         schema:
  *           type: integer
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - role
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 enum:
+ *                   - CUSTOMER
+ *                   - ADMIN
+ *                 example: ADMIN
  *     responses:
  *       200:
  *         description: User role updated successfully
+ *       400:
+ *         description: Invalid role
+ *       403:
+ *         description: Admin access required
  */
 router.patch("/:id/role", authMiddleware, requireAdmin, updateUserRoleController);
 
