@@ -233,37 +233,62 @@ Database Storage
 
 # 📂 Project Structure
 
-```
+```text
 backend
+│
+├── prisma
+│   ├── migrations
+│   │   ├── migration folders
+│   │   └── migration_lock.toml
+│   └── schema.prisma
 │
 ├── src
 │   │
 │   ├── config
+│   │   ├── database.ts
+│   │   ├── env.ts
 │   │   └── swagger.ts
 │   │
 │   ├── controllers
-│   │   ├── user.controller.ts
-│   │   ├── product.controller.ts
-│   │   ├── category.controller.ts
+│   │   ├── auth.controller.ts
 │   │   ├── cart.controller.ts
+│   │   ├── category.controller.ts
 │   │   ├── order.controller.ts
-│   │   └── payment.controller.ts
+│   │   ├── payment.controller.ts
+│   │   ├── product.controller.ts
+│   │   └── user.controller.ts
 │   │
 │   ├── middleware
 │   │   ├── auth.middleware.ts
 │   │   └── role.middleware.ts
 │   │
 │   ├── routes
-│   │   ├── user.routes.ts
-│   │   ├── product.routes.ts
-│   │   ├── category.routes.ts
+│   │   ├── auth.routes.ts
 │   │   ├── cart.routes.ts
+│   │   ├── category.routes.ts
 │   │   ├── order.routes.ts
-│   │   └── payment.routes.ts
+│   │   ├── payment.routes.ts
+│   │   ├── product.routes.ts
+│   │   └── user.routes.ts
 │   │
+│   ├── services
+│   │   ├── auth.service.ts
+│   │   ├── cart.service.ts
+│   │   ├── category.service.ts
+│   │   ├── order.service.ts
+│   │   ├── payment.service.ts
+│   │   ├── product.service.ts
+│   │   └── user.service.ts
+│   │
+│   ├── types
+│   │   └── express.d.ts
+│   │
+│   ├── app.ts
 │   └── server.ts
 │
 ├── package.json
+├── package-lock.json
+├── prisma.config.ts
 ├── tsconfig.json
 ├── .env.example
 ├── .env
