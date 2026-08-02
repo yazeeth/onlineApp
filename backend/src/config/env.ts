@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-const required = (name: "DATABASE_URL" | "JWT_ACCESS_SECRET") => {
+const required = (name: "DATABASE_URL" | "JWT_ACCESS_SECRET" | "JWT_REFRESH_SECRET") => {
     const value = process.env[name]?.trim();
 
     if (!value) {
@@ -28,5 +28,6 @@ export const env = {
     port: parsePort(process.env.PORT),
     frontendUrl: process.env.FRONTEND_URL?.trim() || "http://localhost:3000",
     databaseUrl: required("DATABASE_URL"),
-    jwtAccessSecret: required("JWT_ACCESS_SECRET")
+    jwtAccessSecret: required("JWT_ACCESS_SECRET"),
+    jwtRefreshSecret: required("JWT_REFRESH_SECRET")
 };
