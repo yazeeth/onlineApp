@@ -446,12 +446,160 @@ Includes:
 
 ## Requirements
 
-Install:
+Before running the backend application, install the following prerequisites.
 
-- Node.js
-- npm
-- Docker
-- PostgreSQL (running through Docker container)
+### Node.js
+
+Required runtime environment.
+
+Recommended version:
+
+- Node.js 20.x LTS or higher
+- npm 10.x or higher
+
+Verify installation:
+
+```bash
+node -v
+npm -v
+```
+
+---
+
+### Git
+
+Required for cloning and managing the source code.
+
+Verify installation:
+
+```bash
+git --version
+```
+
+---
+
+### Docker
+
+Docker is used to run PostgreSQL locally using containers.
+
+Required:
+
+- Docker Engine
+- Docker Compose
+
+Verify installation:
+
+```bash
+docker --version
+docker compose version
+```
+
+---
+
+### PostgreSQL
+
+PostgreSQL is the application database.
+
+Development uses PostgreSQL through a Docker container using the official PostgreSQL Docker Hub image.
+
+Recommended image:
+
+```
+postgres:16
+```
+
+Docker Hub image:
+
+```
+postgres:16-alpine
+```
+
+The database runs inside Docker, so PostgreSQL does not need to be installed locally.
+
+Verify Docker is running:
+
+```bash
+ docker ps
+```
+
+Example PostgreSQL container:
+
+```bash
+docker run --name onlineshop-postgres \
+-e POSTGRES_USER=postgres \
+-e POSTGRES_PASSWORD=password \
+-e POSTGRES_DB=onlineshop \
+-p 5432:5432 \
+-d postgres:16-alpine
+```
+
+Check running container:
+
+```bash
+docker ps
+```
+
+---
+
+### npm Package Installation
+
+After cloning the repository, install all backend dependencies from `package.json`:
+
+```bash
+npm install
+```
+
+The project packages are installed automatically from `package.json`.
+
+Main npm packages used:
+
+Runtime dependencies:
+
+- express - REST API framework
+- typescript - TypeScript language support
+- prisma - Database ORM
+- @prisma/client - Prisma database client
+- pg - PostgreSQL database driver
+- jsonwebtoken - JWT authentication
+- bcrypt / bcryptjs - Password hashing
+- cors - Cross origin resource sharing
+- dotenv - Environment variable management
+- swagger-jsdoc - Swagger API specification generation
+- swagger-ui-express - Swagger API documentation UI
+
+Development dependencies:
+
+- ts-node - Execute TypeScript directly
+- nodemon - Automatic development server restart
+- @types/node - Node.js TypeScript definitions
+- @types/express - Express TypeScript definitions
+- @types/jsonwebtoken - JWT TypeScript definitions
+- @types/bcrypt / @types/bcryptjs - bcrypt TypeScript definitions
+- @types/cors - CORS TypeScript definitions
+- @types/swagger-jsdoc - Swagger TypeScript definitions
+- @types/swagger-ui-express - Swagger UI TypeScript definitions
+
+Install packages:
+
+```bash
+npm install
+```
+
+---
+
+### Prisma Setup
+
+Generate Prisma client:
+
+```bash
+npx prisma generate
+```
+
+Run database migrations:
+
+```bash
+npx prisma migrate dev
+```
 
 
 ---
