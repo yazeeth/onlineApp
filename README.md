@@ -1,39 +1,32 @@
 # 🛒 OnlineShop - Full Stack E-Commerce Platform
 
-![Project Status](https://img.shields.io/badge/status-in%20development-blue)
-![Backend](https://img.shields.io/badge/backend-Node.js-green)
-![Language](https://img.shields.io/badge/language-TypeScript-blue)
+A modern e-commerce application built using industry-standard software engineering practices.
 
-A production-oriented full-stack e-commerce platform built using modern software engineering principles.
-
-This project demonstrates practical implementation of:
+The project is designed to demonstrate real-world application development including:
 
 - Backend API development
-- REST architecture
+- Database design
 - Authentication and authorization
-- Database-driven application design
 - Secure coding practices
 - API documentation
-- Containerization
-- Cloud deployment
+- Containerized development
+- Cloud-native deployment concepts
 - DevOps automation
-
-The goal is to build a complete scalable online shopping system following real-world industry practices.
 
 ---
 
 # 📌 Project Overview
 
-OnlineShop is an e-commerce application that provides a complete shopping workflow.
+OnlineShop is a full-stack e-commerce platform.
 
-Users can:
+The application allows users to:
 
-- Register accounts
-- Authenticate securely
+- Create an account
+- Login securely
 - Browse products
-- Manage shopping carts
-- Create orders
-- Track payments
+- Manage shopping cart
+- Place orders
+- Complete payments
 
 
 Administrators can:
@@ -41,83 +34,99 @@ Administrators can:
 - Manage users
 - Manage products
 - Manage categories
-- Control application data
+- Manage application data
 
+
+The project is being developed following scalable backend architecture and production deployment practices.
 
 ---
 
-# 🏗 High Level Architecture
+# 🏗 System Architecture
 
-Current development architecture:
-
-```
-                 Client
-                   |
-                   |
-             REST API Calls
-                   |
-                   |
-          Express.js Backend
-                   |
-                   |
-            Database Layer
-```
-
-
-Future production architecture:
+## Current Development Architecture
 
 ```
-                         Users
-                           |
-                           |
-                         HTTPS
-                           |
-                           |
-                    Cloud Load Balancer
-                           |
-                           |
-                  Frontend Application
-                           |
-                           |
-                    Backend API Service
-                           |
-                           |
-                 Container Platform
-                           |
-                           |
-                    Database Service
+                Client Application
+                       |
+                       |
+                  REST API
+                       |
+                       |
+              Express.js Backend
+                       |
+                       |
+                Prisma ORM
+                       |
+                       |
+          PostgreSQL Docker Container
+```
+
+
+## Future Production Architecture
+
+```
+                    Users
+
+                      |
+
+                    HTTPS
+
+                      |
+
+              Load Balancer / Gateway
+
+                      |
+
+              Frontend Application
+
+                      |
+
+                 Backend API
+
+                      |
+
+              Kubernetes Cluster
+
+                      |
+
+             PostgreSQL Database
 ```
 
 ---
 
 # 🛠 Technology Stack
 
-## Backend Stack
+## Backend
 
-| Component | Technology | Purpose |
-|-|-|-|
-| Language | TypeScript | Application development |
-| Runtime | Node.js | Server execution |
-| Framework | Express.js | REST API framework |
-| API Style | REST | Client-server communication |
-| Authentication | JWT | User authentication |
-| Password Security | bcrypt | Password hashing |
-| Documentation | Swagger/OpenAPI | API documentation |
-| Package Manager | npm | Dependency management |
-| Version Control | Git | Source management |
+| Component | Technology |
+|---|---|
+| Programming Language | TypeScript |
+| Runtime | Node.js |
+| Framework | Express.js |
+| API Architecture | REST API |
+| Database | PostgreSQL |
+| Database ORM | Prisma |
+| Authentication | JWT |
+| Password Security | bcrypt |
+| Documentation | Swagger/OpenAPI |
+| Package Manager | npm |
+| Version Control | Git |
 
 
 ---
 
-# Why TypeScript?
+# 💻 Backend Technology Explanation
 
-TypeScript is used instead of plain JavaScript because it provides:
+## TypeScript
+
+TypeScript is used as the primary backend language.
+
+Benefits:
 
 - Static typing
-- Better code quality
-- Compile-time validation
-- Improved maintainability
-- Better IDE support
+- Better maintainability
+- Early error detection
+- Improved developer experience
 
 
 Example:
@@ -126,78 +135,204 @@ Example:
 const price:number = 100;
 ```
 
-The compiler prevents invalid data types before runtime.
+TypeScript prevents invalid values before runtime.
 
 ---
 
-# Why Node.js?
+# Node.js
 
-Node.js provides the runtime environment for executing backend code.
+Node.js provides the server runtime environment.
 
-Advantages:
+Responsibilities:
 
-- Event-driven architecture
-- Non-blocking I/O
-- Large ecosystem
-- Excellent API development support
+- Execute backend application
+- Handle HTTP requests
+- Manage asynchronous operations
+- Run Express server
 
-
-Node.js allows JavaScript/TypeScript to run on servers instead of only browsers.
 
 ---
 
-# Why Express.js?
+# Express.js
 
-Express.js provides:
+Express.js is the backend framework used to create REST APIs.
 
-- Routing
-- Middleware support
-- HTTP request handling
-- REST API development
+Responsibilities:
+
+- Route management
+- Middleware handling
+- Request/response processing
+- API development
+
+
+Example API:
+
+```
+GET    /api/products
+
+POST   /api/users/register
+
+PATCH  /api/users/:id/role
+```
+
+---
+
+# Database Layer
+
+## PostgreSQL
+
+PostgreSQL is the relational database used by the application.
+
+The application contains relational data such as:
+
+```
+Users
+
+Products
+
+Categories
+
+Cart
+
+Orders
+
+Payments
+```
+
+A relational database is suitable because:
+
+- Data relationships are important
+- Transactions are required
+- Data consistency is critical
+- E-commerce systems require structured data
+
+
+---
+
+# Docker PostgreSQL
+
+During development PostgreSQL runs inside a Docker container.
+
+Architecture:
+
+```
+Developer Machine
+
+        |
+
+      Docker
+
+        |
+
+ PostgreSQL Container
+
+        |
+
+ Database Storage
+```
+
+
+Benefits:
+
+- Consistent development environment
+- Easy setup
+- Same database version for all developers
+- Easy migration to cloud environments
+
+
+Instead of manually installing PostgreSQL:
+
+```bash
+docker compose up
+```
+
+starts the database environment.
+
+---
+
+# Prisma ORM
+
+Prisma is the database access layer between the backend and PostgreSQL.
+
+Architecture:
+
+```
+Express Controller
+
+        |
+
+    Prisma Client
+
+        |
+
+    PostgreSQL
+```
+
+
+Prisma provides:
+
+- Type-safe database queries
+- Database schema management
+- Migration support
+- Easier database operations
 
 
 Example:
 
-```
-GET /api/products
+Without ORM:
 
-POST /api/users/register
-
-PATCH /api/users/:id/role
+```sql
+SELECT *
+FROM users
+WHERE email='user@test.com';
 ```
+
+
+With Prisma:
+
+```typescript
+prisma.user.findUnique({
+ where:{
+   email:"user@test.com"
+ }
+})
+```
+
+
+Prisma converts application queries into SQL.
 
 ---
 
-# Backend Architecture
+# Backend Request Flow
 
-The backend follows a layered architecture:
+A request follows this lifecycle:
 
 ```
-                 HTTP Request
+Client Request
 
-                       |
+       |
 
-                     Routes
+Express Route
 
-                       |
+       |
 
-                  Middleware
+Middleware
 
-                       |
+       |
 
-                  Controller
+Controller
 
-                       |
+       |
 
-                Business Logic
+Prisma ORM
 
-                       |
+       |
 
-                  Database
+PostgreSQL
 
-                       |
+       |
 
-                 HTTP Response
+Response
 ```
 
 ---
@@ -211,11 +346,10 @@ backend
 ├── src
 │
 ├── config
-│   |
 │   └── swagger.ts
 │
 ├── controllers
-│   |
+│
 │   ├── user.controller.ts
 │   ├── product.controller.ts
 │   ├── category.controller.ts
@@ -224,12 +358,12 @@ backend
 │   └── payment.controller.ts
 │
 ├── middleware
-│   |
+│
 │   ├── auth.middleware.ts
 │   └── role.middleware.ts
 │
 ├── routes
-│   |
+│
 │   ├── user.routes.ts
 │   ├── product.routes.ts
 │   ├── category.routes.ts
@@ -246,104 +380,63 @@ backend
 
 ---
 
-# Backend Components Explanation
+# Backend Components
 
-# server.ts
+## server.ts
 
 Application entry point.
 
 Responsibilities:
 
 - Initialize Express
-- Configure middleware
+- Load middleware
 - Register routes
-- Start HTTP server
+- Start server
 
-
-Flow:
-
-```
-server.ts
-
-      |
-
-Express Application
-
-      |
-
-Routes
-
-      |
-
-Controllers
-```
 
 ---
 
-# Routes
+## Routes
 
 Routes define API endpoints.
 
 Example:
 
-```typescript
-router.get("/profile",
-authMiddleware,
-getProfile
-)
+```
+POST /api/users/register
 ```
 
+Routes decide:
 
-Responsibilities:
-
-- Define URL paths
-- Connect requests to controllers
-- Apply middleware
+- Which endpoint exists
+- Which middleware executes
+- Which controller handles request
 
 
 ---
 
-# Controllers
+## Controllers
 
-Controllers handle application operations.
+Controllers contain application logic.
 
 Responsibilities:
 
-- Receive requests
-- Validate data
-- Execute logic
-- Return responses
+- Receive request
+- Validate input
+- Call database layer
+- Return response
 
-
-Example:
-
-```
-Request
-
- |
-
-User Controller
-
- |
-
-Database Query
-
- |
-
-Response
-```
 
 ---
 
-# Middleware
+## Middleware
 
-Middleware executes between request and controller.
+Middleware runs before controllers.
 
 Used for:
 
 - Authentication
 - Authorization
-- Logging
 - Validation
 
 
@@ -354,11 +447,11 @@ Request
 
  |
 
-JWT Middleware
+JWT Authentication
 
  |
 
-Role Middleware
+Role Verification
 
  |
 
@@ -369,48 +462,43 @@ Controller
 
 # Authentication System
 
-Authentication uses JWT.
+## JWT Authentication
 
-## Login Flow
+JWT is used for user authentication.
+
+Flow:
 
 ```
-User enters credentials
+User Login
 
-        |
+     |
 
-Backend validates password
+Validate Email + Password
 
-        |
+     |
 
-JWT token generated
+Generate JWT Token
 
-        |
+     |
 
-Token returned
+Client Stores Token
 
-        |
+     |
 
-Client sends token with requests
+Send Token With Requests
+
+     |
+
+Backend Verifies Token
 ```
 
----
 
-# JWT Request Example
+Protected requests:
 
 ```
 Authorization:
 
-Bearer <token>
-```
-
-Backend validates:
-
-```
-Token valid?
-
-YES → Continue
-
-NO → Reject request
+Bearer <JWT_TOKEN>
 ```
 
 ---
@@ -425,309 +513,271 @@ Incorrect:
 password123
 ```
 
-Correct:
+
+Database stores:
 
 ```
-$2b$10$xxxxxxxxxxxx
+bcrypt hash
+```
+
+Example:
+
+```
+$2b$10$xxxxxxxxxxxxx
 ```
 
 
 bcrypt provides:
 
+- One-way hashing
 - Salt generation
-- Slow hashing
-- Protection against brute force attacks
+- Protection against password leaks
 
 
 ---
 
 # API Documentation
 
-Swagger/OpenAPI is used.
+Swagger/OpenAPI is implemented.
 
 Swagger provides:
 
-- Endpoint documentation
-- Request schema
+- Available endpoints
+- Request body details
 - Required fields
 - Authentication testing
-- Response examples
+- Response documentation
 
 
-Example:
+Access:
 
 ```
-POST /api/users/register
-```
-
-Request:
-
-```json
-{
-"name":"John",
-"email":"john@test.com",
-"password":"password"
-}
+http://localhost:PORT/api-docs
 ```
 
 ---
 
-# Docker Deployment Plan
+# Current Backend Features
 
-The backend will be containerized.
+Completed:
 
-Future Docker architecture:
+✅ Express backend setup
+
+✅ TypeScript configuration
+
+✅ PostgreSQL database container
+
+✅ Prisma database integration
+
+✅ User authentication
+
+✅ JWT authorization
+
+✅ Role-based access control
+
+✅ User management APIs
+
+✅ Product APIs
+
+✅ Category APIs
+
+✅ Cart APIs
+
+✅ Order APIs
+
+✅ Payment APIs
+
+✅ Swagger API documentation
+
+
+---
+
+# Frontend Roadmap
+
+Frontend development will include:
+
+Technology:
+
+- React
+- TypeScript
+- Modern UI framework
+
+
+Features:
+
+- User interface
+- Product browsing
+- Authentication pages
+- Shopping cart UI
+- Checkout flow
+- Order history
+- Admin dashboard
+
+
+Frontend documentation:
 
 ```
-Developer
+frontend/README.md
+```
 
- |
+---
+
+# Docker Deployment Roadmap
+
+Future container architecture:
+
+```
+Source Code
+
+      |
 
 Docker Build
 
- |
+      |
 
 Docker Image
 
- |
+      |
 
 Container Registry
 
- |
+      |
 
-Production Server
+Deployment Environment
 ```
+
+Planned:
+
+- Backend Docker image
+- Frontend Docker image
+- Database container
+- Docker Compose environment
+
 
 ---
 
-# Example Docker Flow
+# Kubernetes Deployment Roadmap
 
-Dockerfile:
-
-```
-Node Base Image
-
-        |
-
-Install Dependencies
-
-        |
-
-Copy Source Code
-
-        |
-
-Build Application
-
-        |
-
-Start API
-```
-
----
-
-# Kubernetes Deployment Plan
-
-Production deployment target:
+Future Kubernetes architecture:
 
 ```
-                Kubernetes Cluster
+                 Kubernetes Cluster
+
 
                        |
 
-                  Ingress Controller
+                Ingress Controller
+
 
                        |
 
-                  Backend Service
+                Backend Service
+
 
                        |
 
-                    Pods
+                  Backend Pods
+
 
                        |
 
-               Node.js Containers
+              Node.js Containers
+
 
                        |
 
-                   Database
+                 PostgreSQL
 ```
 
----
-
-# Kubernetes Components
+Kubernetes components:
 
 ## Deployment
 
-Manages application replicas.
-
-Example:
-
-```
-backend-deployment
-
-replicas: 3
-```
-
 Provides:
 
+- Replica management
 - Scaling
 - Rolling updates
-- Self healing
 
-
----
 
 ## Service
 
-Provides stable networking.
+Provides:
 
-Example:
+- Internal communication
+- Stable networking
 
-```
-Backend Pods
-
-      |
-
- Kubernetes Service
-
-      |
-
- Internal Network
-```
-
-
----
 
 ## Ingress
 
-Handles external HTTPS traffic.
+Provides:
 
-Example:
+- External HTTPS access
+- Routing
 
-```
-User
-
- |
-
-HTTPS
-
- |
-
-Ingress
-
- |
-
-Backend Service
-```
 
 ---
 
-# CI/CD Pipeline
+# CI/CD Pipeline Roadmap
 
 Future GitHub Actions pipeline:
-
 
 ```
 Developer Push
 
-        |
+       |
 
 GitHub Actions
 
-        |
+       |
 
 Run Tests
 
-        |
+       |
 
 Build Application
 
-        |
+       |
 
 Build Docker Image
 
-        |
+       |
 
 Push Image
 
-        |
+       |
 
-Deploy Kubernetes
-
+Deploy
 ```
 
 ---
 
-# Cloud Deployment
-
-Target cloud platforms:
+# Cloud Deployment Roadmap
 
 ## AWS
 
 Possible services:
 
-- EC2
 - ECS
 - EKS
-- RDS
+- EC2
+- RDS PostgreSQL
 - Application Load Balancer
 - CloudWatch
 - Secrets Manager
 
 
-Architecture:
-
-```
-Route53
-
- |
-
-Load Balancer
-
- |
-
-ECS/EKS
-
- |
-
-RDS Database
-
-```
-
----
-
 ## Azure
 
 Possible services:
 
-- Azure App Service
 - AKS
-- Azure Database
+- App Service
+- Azure Database for PostgreSQL
 - Application Gateway
 - Key Vault
-- Monitor
+- Azure Monitor
 
-
-Architecture:
-
-```
-Azure Front Door
-
- |
-
-Application Gateway
-
- |
-
-AKS
-
- |
-
-Database
-
-```
 
 ---
 
@@ -735,34 +785,37 @@ Database
 
 Implemented:
 
-✅ JWT Authentication  
-✅ Password hashing  
-✅ Role authorization  
-✅ Protected routes  
+✅ JWT Authentication
+
+✅ Password hashing
+
+✅ Role authorization
+
+✅ Environment variables
 
 
 Future:
 
 - HTTPS/TLS
 - Rate limiting
-- OWASP Top 10 protection
+- OWASP protection
 - Security headers
 - Vulnerability scanning
-- Dependency scanning
 - Audit logging
+- Secret management
 
 
 ---
 
-# Monitoring Plan
+# Monitoring Roadmap
 
 Production monitoring:
 
 Application:
 
-- API response time
+- API latency
 - Error rate
-- Request count
+- Request metrics
 
 
 Infrastructure:
@@ -784,28 +837,17 @@ Tools:
 
 ---
 
-# Current Development Status
+# Development Goals
 
-Completed:
+This project is created to gain practical experience in:
 
-✅ Backend API foundation  
-✅ Authentication  
-✅ User management  
-✅ Product APIs  
-✅ Category APIs  
-✅ Cart APIs  
-✅ Order APIs  
-✅ Payment APIs  
-✅ Swagger Documentation  
-
-
-Next:
-
-⬜ React Frontend  
-⬜ Docker  
-⬜ Kubernetes  
-⬜ CI/CD  
-⬜ Cloud Deployment  
+- Backend engineering
+- Software architecture
+- Database design
+- Cloud engineering
+- DevOps practices
+- Application security
+- Production deployment
 
 
 ---
@@ -814,4 +856,10 @@ Next:
 
 Yazeeth
 
-DevOps Engineer | Cloud Engineer | Network Engineer | Software Engineering
+DevOps Engineer | Cloud Engineer | Software Engineering Learner
+
+---
+
+# License
+
+Educational and portfolio project.
