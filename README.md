@@ -343,6 +343,9 @@ Response
 backend
 
 │
+├── prisma
+│   └── schema.prisma
+│
 ├── src
 │
 ├── config
@@ -371,11 +374,12 @@ backend
 │   ├── order.routes.ts
 │   └── payment.routes.ts
 │
-├── server.ts
-│
+├── .env.example
+├── .env
 ├── package.json
-│
-└── tsconfig.json
+├── package-lock.json
+├── tsconfig.json
+└── server.ts
 ```
 
 ---
@@ -552,7 +556,7 @@ Swagger provides:
 Access:
 
 ```
-http://localhost:PORT/api-docs
+http://localhost:5050/api-docs
 ```
 
 ---
@@ -585,10 +589,35 @@ Completed:
 
 ✅ Order APIs
 
-✅ Payment APIs
+✅ Payment API structure
 
 ✅ Swagger API documentation
 
+
+---
+
+# Example API Endpoints
+
+Authentication:
+
+```
+POST /api/users/register
+POST /api/users/login
+```
+
+Products:
+
+```
+GET  /api/products
+POST /api/products
+```
+
+Categories:
+
+```
+GET  /api/categories
+POST /api/categories
+```
 
 ---
 
@@ -652,6 +681,16 @@ Planned:
 - Frontend Docker image
 - Database container
 - Docker Compose environment
+
+Docker Compose
+
+Responsible for:
+
+- Creating PostgreSQL container
+- Managing database configuration
+- Setting environment variables
+- Providing a consistent development environment
+- Managing persistent database storage
 
 
 ---
