@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { env } from "../config/env";
 
 
 export const authMiddleware = (
@@ -31,12 +32,9 @@ export const authMiddleware = (
         const token = parts[1];
 
 
-        if (!process.env.JWT_ACCESS_SECRET) {
-            throw new Error("JWT secret missing");
-        }
         const decoded = jwt.verify(
             token,
-            process.env.JWT_ACCESS_SECRET
+            env.jwtAccessSecret
         );
 
 
