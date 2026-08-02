@@ -86,6 +86,70 @@ Used for:
 - Middleware handling
 - HTTP request/response management
 
+---
+
+## Database
+
+### PostgreSQL
+
+PostgreSQL is used as the primary relational database.
+
+The database stores structured application data including:
+
+- Users
+- Products
+- Categories
+- Cart data
+- Orders
+- Payments
+
+### Docker PostgreSQL Container
+
+During development PostgreSQL runs inside a Docker container.
+
+Benefits:
+
+- Consistent development environment
+- Easy database setup
+- Same database version across environments
+- Easier migration to cloud databases later
+
+Architecture:
+
+```
+Backend Application
+        |
+        |
+Prisma ORM
+        |
+        |
+PostgreSQL Docker Container
+```
+
+---
+
+## Prisma ORM
+
+Prisma is used as the database access layer between the Node.js application and PostgreSQL.
+
+Responsibilities:
+
+- Type-safe database queries
+- Database schema management
+- Migration management
+- Simplified database operations
+
+Example flow:
+
+```
+Controller
+    |
+    |
+Prisma Client
+    |
+    |
+PostgreSQL Database
+```
 
 ---
 
@@ -201,6 +265,7 @@ backend
 │
 ├── package.json
 ├── tsconfig.json
+├── .env.example
 ├── .env
 └── README.md
 ```
@@ -385,7 +450,8 @@ Install:
 
 - Node.js
 - npm
-- Database server
+- Docker
+- PostgreSQL (running through Docker container)
 
 
 ---
@@ -417,12 +483,13 @@ cp .env.example .env
 Then update the database credentials and JWT secret in `.env`:
 
 ```env
-PORT=5000
+PORT=5050
 FRONTEND_URL=http://localhost:3000
 
 DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/onlineshop?schema=public"
 
 JWT_ACCESS_SECRET=replace-with-a-long-random-secret
+JWT_REFRESH_SECRET=replace-with-a-long-random-secret
 ```
 
 ---
@@ -591,3 +658,4 @@ DevOps Engineer | Cloud Engineer
 # 📄 License
 
 This project is for learning and portfolio purposes.
+
