@@ -2,6 +2,7 @@ import prisma from "../config/database";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { env } from "../config/env";
 
 
 
@@ -17,7 +18,7 @@ const generateAccessToken = (
             email,
             role
         },
-        process.env.JWT_ACCESS_SECRET!,
+        env.jwtAccessSecret,
         {
             expiresIn: "15m"
         }

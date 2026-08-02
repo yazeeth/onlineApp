@@ -408,20 +408,21 @@ npm install
 
 ## Configure Environment Variables
 
-Create:
+Copy the example configuration:
 
-```
-.env
+```bash
+cp .env.example .env
 ```
 
-Example:
+Then update the database credentials and JWT secret in `.env`:
 
 ```env
-PORT=5050
+PORT=5000
+FRONTEND_URL=http://localhost:3000
 
-DATABASE_URL=
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/onlineshop?schema=public"
 
-JWT_SECRET=
+JWT_ACCESS_SECRET=replace-with-a-long-random-secret
 ```
 
 ---
@@ -435,7 +436,7 @@ npm run dev
 Application runs:
 
 ```
-http://localhost:5050
+http://localhost:5000
 ```
 
 ---

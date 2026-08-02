@@ -10,12 +10,13 @@ import paymentRoutes from "./routes/payment.routes";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 import helmet from "helmet";
+import { env } from "./config/env";
 
 const app = express();
 
 app.use(helmet());
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: env.frontendUrl,
     credentials: true
 }));
 app.use(express.json());
