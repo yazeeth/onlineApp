@@ -1,534 +1,610 @@
-# OnlineShop Backend API
+# 🛒 OnlineShop - Full Stack E-Commerce Platform
 
-A production-style e-commerce backend API built using **Node.js, Express.js, and TypeScript**.
+![Project Status](https://img.shields.io/badge/status-in%20development-blue)
+![Backend](https://img.shields.io/badge/backend-Node.js-green)
+![Language](https://img.shields.io/badge/language-TypeScript-blue)
 
-This project demonstrates backend software engineering concepts including REST API development, authentication, authorization, database integration, API documentation, and scalable project structure.
+A production-oriented full-stack e-commerce platform built using modern software engineering principles.
 
-The goal of this project is to build a complete online shopping platform following real-world software development practices.
+This project demonstrates practical implementation of:
+
+- Backend API development
+- REST architecture
+- Authentication and authorization
+- Database-driven application design
+- Secure coding practices
+- API documentation
+- Containerization
+- Cloud deployment
+- DevOps automation
+
+The goal is to build a complete scalable online shopping system following real-world industry practices.
 
 ---
 
-# 🚀 Project Overview
+# 📌 Project Overview
 
-OnlineShop is an e-commerce backend system that provides APIs for:
+OnlineShop is an e-commerce application that provides a complete shopping workflow.
 
-- User management
-- Authentication and authorization
-- Product management
-- Category management
-- Shopping cart
-- Order processing
-- Payment handling
-- API documentation
+Users can:
 
-The backend follows a layered architecture approach:
+- Register accounts
+- Authenticate securely
+- Browse products
+- Manage shopping carts
+- Create orders
+- Track payments
+
+
+Administrators can:
+
+- Manage users
+- Manage products
+- Manage categories
+- Control application data
+
+
+---
+
+# 🏗 High Level Architecture
+
+Current development architecture:
 
 ```
-Client Application
-        |
-        |
-REST API
-        |
-        |
-Express.js Backend
-        |
-        |
-Controllers
-        |
-        |
-Database Layer
+                 Client
+                   |
+                   |
+             REST API Calls
+                   |
+                   |
+          Express.js Backend
+                   |
+                   |
+            Database Layer
+```
+
+
+Future production architecture:
+
+```
+                         Users
+                           |
+                           |
+                         HTTPS
+                           |
+                           |
+                    Cloud Load Balancer
+                           |
+                           |
+                  Frontend Application
+                           |
+                           |
+                    Backend API Service
+                           |
+                           |
+                 Container Platform
+                           |
+                           |
+                    Database Service
 ```
 
 ---
 
 # 🛠 Technology Stack
 
-## Programming Language
+## Backend Stack
 
-### TypeScript
+| Component | Technology | Purpose |
+|-|-|-|
+| Language | TypeScript | Application development |
+| Runtime | Node.js | Server execution |
+| Framework | Express.js | REST API framework |
+| API Style | REST | Client-server communication |
+| Authentication | JWT | User authentication |
+| Password Security | bcrypt | Password hashing |
+| Documentation | Swagger/OpenAPI | API documentation |
+| Package Manager | npm | Dependency management |
+| Version Control | Git | Source management |
 
-Used as the primary development language.
 
-Benefits:
+---
+
+# Why TypeScript?
+
+TypeScript is used instead of plain JavaScript because it provides:
 
 - Static typing
-- Better maintainability
-- Improved developer experience
-- Compile-time error detection
+- Better code quality
+- Compile-time validation
+- Improved maintainability
+- Better IDE support
 
 
----
+Example:
 
-## Runtime Environment
+```typescript
+const price:number = 100;
+```
 
-### Node.js
-
-Node.js provides the runtime environment to execute the backend application.
-
-Responsibilities:
-
-- Running the Express server
-- Managing packages
-- Handling server-side JavaScript execution
-
+The compiler prevents invalid data types before runtime.
 
 ---
 
-## Backend Framework
+# Why Node.js?
 
-### Express.js
+Node.js provides the runtime environment for executing backend code.
 
-Express is used to build REST APIs.
+Advantages:
 
-Used for:
+- Event-driven architecture
+- Non-blocking I/O
+- Large ecosystem
+- Excellent API development support
+
+
+Node.js allows JavaScript/TypeScript to run on servers instead of only browsers.
+
+---
+
+# Why Express.js?
+
+Express.js provides:
 
 - Routing
-- Middleware handling
-- HTTP request/response management
-
-
----
-
-## API Documentation
-
-### Swagger / OpenAPI
-
-Swagger provides interactive API documentation.
-
-Features:
-
-- API endpoint documentation
-- Request body schemas
-- Response examples
-- Authentication testing
-
-
-Access:
-
-```
-http://localhost:PORT/api-docs
-```
-
----
-
-## Authentication
-
-### JWT (JSON Web Token)
-
-Used for secure user authentication.
-
-Authentication flow:
-
-```
-User Login
-
-    |
-
-Validate Credentials
-
-    |
-
-Generate JWT Token
-
-    |
-
-Client Sends Token With Requests
-
-    |
-
-Backend Validates Token
-```
-
----
-
-## Password Security
-
-### bcrypt
-
-Passwords are never stored as plain text.
-
-Password flow:
-
-```
-Plain Password
-
-      |
-
-bcrypt Hashing
-
-      |
-
-Encrypted Password Hash
-
-      |
-
-Database Storage
-```
-
----
-
-# 📂 Project Structure
-
-```
-backend
-│
-├── src
-│   │
-│   ├── config
-│   │   └── swagger.ts
-│   │
-│   ├── controllers
-│   │   ├── user.controller.ts
-│   │   ├── product.controller.ts
-│   │   ├── category.controller.ts
-│   │   ├── cart.controller.ts
-│   │   ├── order.controller.ts
-│   │   └── payment.controller.ts
-│   │
-│   ├── middleware
-│   │   ├── auth.middleware.ts
-│   │   └── role.middleware.ts
-│   │
-│   ├── routes
-│   │   ├── user.routes.ts
-│   │   ├── product.routes.ts
-│   │   ├── category.routes.ts
-│   │   ├── cart.routes.ts
-│   │   ├── order.routes.ts
-│   │   └── payment.routes.ts
-│   │
-│   └── server.ts
-│
-├── package.json
-├── tsconfig.json
-├── .env
-└── README.md
-```
-
----
-
-# 🏗 Architecture
-
-The application follows a layered backend architecture.
-
-## Request Flow
-
-Example:
-
-```
-Frontend
-
-    |
-
-HTTP Request
-
-    |
-
-Route
-
-    |
-
-Middleware
-
-    |
-
-Controller
-
-    |
-
-Database
-
-    |
-
-Response
-```
-
----
-
-# 🔐 Authentication & Authorization
-
-## Authentication
-
-Implemented using JWT.
-
-Users can:
-
-- Register
-- Login
-- Access protected APIs
-
-
----
-
-## Authorization
-
-Role-based access control implemented.
-
-Roles:
-
-```
-CUSTOMER
-ADMIN
-```
-
-Example:
-
-Customer:
-
-- Browse products
-- Manage cart
-- Place orders
-
-
-Admin:
-
-- Manage products
-- Manage users
-- Update roles
-
-
----
-
-# 📌 API Modules
-
-## User APIs
-
-Features:
-
-- Register user
-- Login user
-- View profile
-- View all users (Admin)
-- Update user roles (Admin)
-
-
----
-
-## Product APIs
-
-Features:
-
-- Create product
-- View products
-- View single product
-- Update product
-- Delete product
-
-
----
-
-## Category APIs
-
-Features:
-
-- Create categories
-- View categories
-- Update categories
-- Delete categories
-
-
----
-
-## Cart APIs
-
-Features:
-
-- Add products to cart
-- View cart
-- Update cart quantity
-- Remove cart items
-
-
----
-
-## Order APIs
-
-Features:
-
-- Create order
-- View orders
-- Manage order status
-
-
----
-
-## Payment APIs
-
-Features:
-
-- Create payment records
-- Track payment status
-
-
----
-
-# 📖 API Documentation
-
-Swagger documentation provides complete API details.
-
-Includes:
-
-- Endpoint descriptions
-- Required parameters
-- Request body schemas
-- Authentication requirements
-- Response examples
-
-
----
-
-# ⚙️ Local Development Setup
-
-## Requirements
-
-Install:
-
-- Node.js
-- npm
-- Database server
-
-
----
-
-## Clone Repository
-
-```bash
-git clone https://github.com/yourusername/OnlineShop.git
-```
-
----
-
-## Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-## Configure Environment Variables
-
-Create:
-
-```
-.env
-```
-
-Example:
-
-```env
-PORT=5050
-
-DATABASE_URL=
-
-JWT_SECRET=
-```
-
----
-
-## Start Development Server
-
-```bash
-npm run dev
-```
-
-Application runs:
-
-```
-http://localhost:5050
-```
-
----
-
-# 🧪 Testing
-
-API testing can be performed using:
-
-- Swagger UI
-- Postman
-- curl
+- Middleware support
+- HTTP request handling
+- REST API development
 
 
 Example:
 
 ```
 GET /api/products
+
+POST /api/users/register
+
+PATCH /api/users/:id/role
 ```
 
 ---
 
-# 🔄 Development Workflow
+# Backend Architecture
 
-Git workflow:
+The backend follows a layered architecture:
 
 ```
-Code Change
+                 HTTP Request
 
-     |
+                       |
 
-Git Add
+                     Routes
 
-     |
+                       |
 
-Git Commit
+                  Middleware
 
-     |
+                       |
 
-Git Push
+                  Controller
 
-     |
+                       |
 
-Remote Repository
+                Business Logic
+
+                       |
+
+                  Database
+
+                       |
+
+                 HTTP Response
 ```
 
 ---
 
-# 🔒 Security Practices Implemented
+# Backend Folder Structure
 
-Implemented:
+```
+backend
 
-✅ Password hashing using bcrypt  
-✅ JWT authentication  
-✅ Role-based authorization  
-✅ Environment variables for secrets  
-✅ Protected admin routes  
-✅ API documentation  
+│
+├── src
+│
+├── config
+│   |
+│   └── swagger.ts
+│
+├── controllers
+│   |
+│   ├── user.controller.ts
+│   ├── product.controller.ts
+│   ├── category.controller.ts
+│   ├── cart.controller.ts
+│   ├── order.controller.ts
+│   └── payment.controller.ts
+│
+├── middleware
+│   |
+│   ├── auth.middleware.ts
+│   └── role.middleware.ts
+│
+├── routes
+│   |
+│   ├── user.routes.ts
+│   ├── product.routes.ts
+│   ├── category.routes.ts
+│   ├── cart.routes.ts
+│   ├── order.routes.ts
+│   └── payment.routes.ts
+│
+├── server.ts
+│
+├── package.json
+│
+└── tsconfig.json
+```
+
+---
+
+# Backend Components Explanation
+
+# server.ts
+
+Application entry point.
+
+Responsibilities:
+
+- Initialize Express
+- Configure middleware
+- Register routes
+- Start HTTP server
+
+
+Flow:
+
+```
+server.ts
+
+      |
+
+Express Application
+
+      |
+
+Routes
+
+      |
+
+Controllers
+```
+
+---
+
+# Routes
+
+Routes define API endpoints.
+
+Example:
+
+```typescript
+router.get("/profile",
+authMiddleware,
+getProfile
+)
+```
+
+
+Responsibilities:
+
+- Define URL paths
+- Connect requests to controllers
+- Apply middleware
 
 
 ---
 
-# 🚀 Future Improvements
+# Controllers
 
-## Frontend
+Controllers handle application operations.
 
-Planned:
+Responsibilities:
 
-- React + TypeScript frontend
-- User interface
-- Product browsing
-- Cart UI
-- Checkout page
-- Admin dashboard
+- Receive requests
+- Validate data
+- Execute logic
+- Return responses
+
+
+Example:
+
+```
+Request
+
+ |
+
+User Controller
+
+ |
+
+Database Query
+
+ |
+
+Response
+```
+
+---
+
+# Middleware
+
+Middleware executes between request and controller.
+
+Used for:
+
+- Authentication
+- Authorization
+- Logging
+- Validation
+
+
+Example:
+
+```
+Request
+
+ |
+
+JWT Middleware
+
+ |
+
+Role Middleware
+
+ |
+
+Controller
+```
+
+---
+
+# Authentication System
+
+Authentication uses JWT.
+
+## Login Flow
+
+```
+User enters credentials
+
+        |
+
+Backend validates password
+
+        |
+
+JWT token generated
+
+        |
+
+Token returned
+
+        |
+
+Client sends token with requests
+```
+
+---
+
+# JWT Request Example
+
+```
+Authorization:
+
+Bearer <token>
+```
+
+Backend validates:
+
+```
+Token valid?
+
+YES → Continue
+
+NO → Reject request
+```
+
+---
+
+# Password Security
+
+Passwords are never stored directly.
+
+Incorrect:
+
+```
+password123
+```
+
+Correct:
+
+```
+$2b$10$xxxxxxxxxxxx
+```
+
+
+bcrypt provides:
+
+- Salt generation
+- Slow hashing
+- Protection against brute force attacks
 
 
 ---
 
-## DevOps Improvements
+# API Documentation
 
-Planned:
+Swagger/OpenAPI is used.
 
-- Docker containerization
-- CI/CD pipeline
-- GitHub Actions
-- Cloud deployment
-- Monitoring
+Swagger provides:
+
+- Endpoint documentation
+- Request schema
+- Required fields
+- Authentication testing
+- Response examples
+
+
+Example:
+
+```
+POST /api/users/register
+```
+
+Request:
+
+```json
+{
+"name":"John",
+"email":"john@test.com",
+"password":"password"
+}
+```
+
+---
+
+# Docker Deployment Plan
+
+The backend will be containerized.
+
+Future Docker architecture:
+
+```
+Developer
+
+ |
+
+Docker Build
+
+ |
+
+Docker Image
+
+ |
+
+Container Registry
+
+ |
+
+Production Server
+```
+
+---
+
+# Example Docker Flow
+
+Dockerfile:
+
+```
+Node Base Image
+
+        |
+
+Install Dependencies
+
+        |
+
+Copy Source Code
+
+        |
+
+Build Application
+
+        |
+
+Start API
+```
+
+---
+
+# Kubernetes Deployment Plan
+
+Production deployment target:
+
+```
+                Kubernetes Cluster
+
+                       |
+
+                  Ingress Controller
+
+                       |
+
+                  Backend Service
+
+                       |
+
+                    Pods
+
+                       |
+
+               Node.js Containers
+
+                       |
+
+                   Database
+```
+
+---
+
+# Kubernetes Components
+
+## Deployment
+
+Manages application replicas.
+
+Example:
+
+```
+backend-deployment
+
+replicas: 3
+```
+
+Provides:
+
+- Scaling
+- Rolling updates
+- Self healing
 
 
 ---
 
-## Cloud Deployment
+## Service
 
-Future architecture:
+Provides stable networking.
+
+Example:
+
+```
+Backend Pods
+
+      |
+
+ Kubernetes Service
+
+      |
+
+ Internal Network
+```
+
+
+---
+
+## Ingress
+
+Handles external HTTPS traffic.
+
+Example:
 
 ```
 User
@@ -539,54 +615,203 @@ HTTPS
 
  |
 
+Ingress
+
+ |
+
+Backend Service
+```
+
+---
+
+# CI/CD Pipeline
+
+Future GitHub Actions pipeline:
+
+
+```
+Developer Push
+
+        |
+
+GitHub Actions
+
+        |
+
+Run Tests
+
+        |
+
+Build Application
+
+        |
+
+Build Docker Image
+
+        |
+
+Push Image
+
+        |
+
+Deploy Kubernetes
+
+```
+
+---
+
+# Cloud Deployment
+
+Target cloud platforms:
+
+## AWS
+
+Possible services:
+
+- EC2
+- ECS
+- EKS
+- RDS
+- Application Load Balancer
+- CloudWatch
+- Secrets Manager
+
+
+Architecture:
+
+```
+Route53
+
+ |
+
 Load Balancer
 
  |
 
-Docker Container
+ECS/EKS
 
  |
 
-Node.js API
+RDS Database
+
+```
+
+---
+
+## Azure
+
+Possible services:
+
+- Azure App Service
+- AKS
+- Azure Database
+- Application Gateway
+- Key Vault
+- Monitor
+
+
+Architecture:
+
+```
+Azure Front Door
+
+ |
+
+Application Gateway
+
+ |
+
+AKS
 
  |
 
 Database
+
 ```
 
-Possible platforms:
+---
 
-- AWS
-- Azure
-- Kubernetes
+# Security Roadmap
+
+Implemented:
+
+✅ JWT Authentication  
+✅ Password hashing  
+✅ Role authorization  
+✅ Protected routes  
+
+
+Future:
+
+- HTTPS/TLS
+- Rate limiting
+- OWASP Top 10 protection
+- Security headers
+- Vulnerability scanning
+- Dependency scanning
+- Audit logging
 
 
 ---
 
-# 🎯 Learning Objectives
+# Monitoring Plan
 
-This project demonstrates practical knowledge of:
+Production monitoring:
 
-- Backend development
-- REST API design
-- Authentication systems
-- Database-driven applications
-- Software architecture
-- API documentation
-- Secure coding practices
-- Production deployment concepts
+Application:
+
+- API response time
+- Error rate
+- Request count
+
+
+Infrastructure:
+
+- CPU
+- Memory
+- Network
+- Database performance
+
+
+Tools:
+
+- Datadog
+- Prometheus
+- Grafana
+- CloudWatch
+- Azure Monitor
 
 
 ---
 
-# 👨‍💻 Author
+# Current Development Status
+
+Completed:
+
+✅ Backend API foundation  
+✅ Authentication  
+✅ User management  
+✅ Product APIs  
+✅ Category APIs  
+✅ Cart APIs  
+✅ Order APIs  
+✅ Payment APIs  
+✅ Swagger Documentation  
+
+
+Next:
+
+⬜ React Frontend  
+⬜ Docker  
+⬜ Kubernetes  
+⬜ CI/CD  
+⬜ Cloud Deployment  
+
+
+---
+
+# Author
 
 Yazeeth
 
-DevOps Engineer | Cloud Engineer | Software Engineering Learner
-
----
-
-# 📄 License
-
-This project is for learning and portfolio purposes.
+DevOps Engineer | Cloud Engineer | Network Engineer | Software Engineering
