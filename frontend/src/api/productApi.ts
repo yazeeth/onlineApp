@@ -8,7 +8,7 @@ import type {
 export const productApi = {
   getAllProducts: async (): Promise<Product[]> => {
     const response = await api.get("/products");
-    return response.data;
+    return response.data.products;
   },
 
   getProduct: async (id: number): Promise<Product> => {

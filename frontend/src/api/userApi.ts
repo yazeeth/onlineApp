@@ -9,6 +9,11 @@ export const userApi = {
 
   getProfile: async (): Promise<User> => {
     const response = await api.get("/users/profile");
+    return response.data.user;
+  },
+
+  updateProfile: async (data: { name?: string; email?: string; phone?: string }) => {
+    const response = await api.patch("/users/profile", data);
     return response.data;
   },
 

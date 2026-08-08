@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkout, getOrders, getSingleOrder, getAllOrdersAdmin, changeOrderStatus } from "../controllers/order.controller";
+import { checkout, getOrders, getSingleOrder, getAllOrdersAdmin, changeOrderStatus, cancelOrder } from "../controllers/order.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { requireAdmin } from "../middleware/role.middleware";
 
@@ -75,6 +75,46 @@ router.get(
     "/my-orders",
     authMiddleware,
     getOrders
+);
+
+/**
+ * @swagger
+ * /api/orders/{id}/cancel:
+ *   put:
+ *     summary: Cancel a pending order
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Order cancelled successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Order cancelled successfully
+ *               order:
+ *                 id: 1
+ *                 status: CANCELLED
+ *       400:
+ *         description: Order cannot be cancelled because it is not pending
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Order does not belong to the authenticated user
+ *       404:
+ *         description: Order not found
+ */
+router.put(
+    "/:id/cancel",
+    authMiddleware,
+    cancelOrder
 );
 
 /**

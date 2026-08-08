@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createOrder, getUserOrders, getOrderById, getAllOrders, updateOrderStatus } from "../services/order.service";
+import { createOrder, getUserOrders, getOrderById, getAllOrders, updateOrderStatus, cancelPendingOrder } from "../services/order.service";
 
 export const checkout = async (
     req: Request,
@@ -13,10 +13,11 @@ export const checkout = async (
         };
 
 
-        const { paymentMethod } = req.body;
+        const { addressId, paymentMethod } = req.body;
 
         const order = await createOrder(
             user.userId,
+            addressId,
             paymentMethod
         );
 
@@ -152,6 +153,51 @@ export const changeOrderStatus = async (
 
         res.status(400).json({
             message: error.message
+        });
+
+    }
+
+};
+
+export const cancelOrder = async (
+    req: Request,
+    res: Response
+) => {
+
+    try {
+
+        const user = req.user as {
+            userId: number;
+        };
+
+        const orderId = Number(req.params.id);
+
+        const order = await cancelPendingOrder(
+            orderId,
+            user.userId
+        );
+
+        res.json({
+            message: "Order cancelled successfully",
+            order
+        });
+
+    } catch(error:any){
+
+        const message = error.message;
+
+        if (message === "Order not found") {
+            res.status(404).json({ message });
+            return;
+        }
+
+        if (message === "Order does not belong to the authenticated user") {
+            res.status(403).json({ message });
+            return;
+        }
+
+        res.status(400).json({
+            message
         });
 
     }

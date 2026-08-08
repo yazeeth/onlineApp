@@ -7,6 +7,7 @@ import categoryRoutes from "./routes/category.routes";
 import cartRoutes from "./routes/cart.routes";
 import orderRoutes from "./routes/order.routes";
 import paymentRoutes from "./routes/payment.routes";
+import addressRoutes from "./routes/address.routes";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 import helmet from "helmet";
@@ -16,7 +17,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({
-    origin: env.frontendUrl,
+    origin: ["http://localhost:5173"],
     credentials: true
 }));
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/addresses", addressRoutes);
 app.use(
     "/api-docs",
     swaggerUi.serve,

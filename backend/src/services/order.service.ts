@@ -39,6 +39,7 @@ const orderStatusTransitions: Record<OrderStatus, OrderStatus[]> = {
 
 export const createOrder = async (
     userId: number,
+    addressId: number,
     paymentMethod: PaymentMethod
 ) => {
 
@@ -92,6 +93,7 @@ export const createOrder = async (
         const order = await tx.order.create({
             data: {
                 userId,
+                addressId,
                 totalAmount,
                 status: OrderStatus.PENDING,
                 items: {
@@ -100,38 +102,34 @@ export const createOrder = async (
                         quantity: item.quantity,
                         price: item.product.price
                     }))
+                },
+                payment: {
+                    create: {
+                        amount: totalAmount,
+                        method: paymentMethod,
+                        status: PaymentStatus.PENDING
+                    }
                 }
             },
-
             include: {
-                items: true
-            }
-        });
-
-        await tx.payment.create({
-            data: {
-                orderId: order.id,
-                amount: totalAmount,
-                method: paymentMethod,
-                status: PaymentStatus.PENDING
+                address: true,
+                items: true,
+                payment: true
             }
         });
 
         // Reduce product stock
         for (const item of cart.items) {
-
             await tx.product.update({
                 where: {
                     id: item.productId
                 },
-
                 data: {
                     stock: {
                         decrement: item.quantity
                     }
                 }
             });
-
         }
 
         // Clear cart after checkout
@@ -142,7 +140,6 @@ export const createOrder = async (
         });
 
         return order;
-
     });
 
     return order;
@@ -159,6 +156,8 @@ export const getUserOrders = async (
             userId
         },
         include: {
+            address: true,
+            payment: true,
             items: {
                 include: {
                     product: true
@@ -182,20 +181,19 @@ export const getOrderById = async (
 ) => {
 
     const order = await prisma.order.findFirst({
-
         where: {
             id: orderId,
             userId
         },
-
         include: {
+            address: true,
+            payment: true,
             items: {
                 include: {
                     product: true
                 }
             }
         }
-
     });
 
 
@@ -211,7 +209,6 @@ export const getOrderById = async (
 export const getAllOrders = async () => {
 
     const orders = await prisma.order.findMany({
-
         include: {
             user: {
                 select: {
@@ -220,6 +217,8 @@ export const getAllOrders = async () => {
                     email: true
                 }
             },
+            address: true,
+            payment: true,
 
             items: {
                 include: {
@@ -227,11 +226,9 @@ export const getAllOrders = async () => {
                 }
             }
         },
-
         orderBy: {
             createdAt: "desc"
         }
-
     });
 
 
@@ -308,6 +305,71 @@ export const updateOrderStatus = async (
 
     });
 
+
+    return order;
+
+};
+
+export const cancelPendingOrder = async (
+    orderId: number,
+    userId: number
+) => {
+
+    const existingOrder = await prisma.order.findUnique({
+        where: {
+            id: orderId
+        },
+        include: {
+            items: true
+        }
+    });
+
+    if (!existingOrder) {
+        throw new Error("Order not found");
+    }
+
+    if (existingOrder.userId !== userId) {
+        throw new Error("Order does not belong to the authenticated user");
+    }
+
+    if (existingOrder.status !== OrderStatus.PENDING) {
+        throw new Error("Only pending orders can be cancelled");
+    }
+
+    const order = await prisma.$transaction(async (tx) => {
+
+        for (const item of existingOrder.items) {
+            await tx.product.update({
+                where: {
+                    id: item.productId
+                },
+                data: {
+                    stock: {
+                        increment: item.quantity
+                    }
+                }
+            });
+        }
+
+        return await tx.order.update({
+            where: {
+                id: orderId
+            },
+            data: {
+                status: OrderStatus.CANCELLED
+            },
+            include: {
+                address: true,
+                payment: true,
+                items: {
+                    include: {
+                        product: true
+                    }
+                }
+            }
+        });
+
+    });
 
     return order;
 

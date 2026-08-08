@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, getProfile, updateUserRoleController, getAllUsersController } from "../controllers/user.controller";
+import { registerUser, getProfile, updateProfile, updateUserRoleController, getAllUsersController } from "../controllers/user.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { requireAdmin } from "../middleware/role.middleware";
 
@@ -60,6 +60,40 @@ router.post("/register", registerUser);
  *         description: Unauthorized
  */
 router.get("/profile", authMiddleware, getProfile);
+/**
+ * @swagger
+ * /api/users/profile:
+ *   patch:
+ *     summary: Update current user profile
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: john@example.com
+ *               phone:
+ *                 type: string
+ *                 example: +94771234567
+ *     responses:
+ *       200:
+ *         description: User profile updated successfully
+ *       400:
+ *         description: Invalid profile data or email already exists
+ *       401:
+ *         description: Unauthorized
+ */
+router.patch("/profile", authMiddleware, updateProfile);
 /**
  * @swagger
  * /api/users:
