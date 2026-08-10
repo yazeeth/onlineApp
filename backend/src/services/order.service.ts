@@ -99,6 +99,8 @@ export const createOrder = async (
                 items: {
                     create: cart.items.map((item) => ({
                         productId: item.productId,
+                        productName: item.product.name,
+                        productImage: item.product.image,
                         quantity: item.quantity,
                         price: item.product.price
                     }))
@@ -120,6 +122,10 @@ export const createOrder = async (
 
         // Reduce product stock
         for (const item of cart.items) {
+            if (item.productId === null) {
+                throw new Error("Order item product is no longer available");
+            }
+
             await tx.product.update({
                 where: {
                     id: item.productId
@@ -278,6 +284,9 @@ export const updateOrderStatus = async (
             });
 
             for (const item of orderItems) {
+                if (item.productId === null) {
+                    continue;
+                }
 
                 await tx.product.update({
                     where: {
@@ -289,7 +298,6 @@ export const updateOrderStatus = async (
                         }
                     }
                 });
-
             }
 
         }
@@ -339,6 +347,10 @@ export const cancelPendingOrder = async (
     const order = await prisma.$transaction(async (tx) => {
 
         for (const item of existingOrder.items) {
+            if (item.productId === null) {
+                continue;
+            }
+
             await tx.product.update({
                 where: {
                     id: item.productId

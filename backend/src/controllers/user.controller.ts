@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, updateUserRole, getAllUsers } from "../services/user.service";
+import { createUser, changeUserPassword, updateUserRole, getAllUsers } from "../services/user.service";
 import prisma from "../config/database";
 
 export const registerUser = async (
@@ -160,6 +160,33 @@ export const updateProfile = async (
     } catch (error: any) {
         return res.status(500).json({
             message: error.message || "Server error"
+        });
+    }
+
+};
+
+export const changePassword = async (
+    req: Request,
+    res: Response
+) => {
+
+    try {
+        const userId = (req.user as any).userId;
+        const { currentPassword, newPassword } = req.body;
+
+        await changeUserPassword(
+            userId,
+            currentPassword,
+            newPassword
+        );
+
+        return res.json({
+            message: "Password changed successfully"
+        });
+
+    } catch (error: any) {
+        return res.status(400).json({
+            message: error.message || "Unable to change password"
         });
     }
 

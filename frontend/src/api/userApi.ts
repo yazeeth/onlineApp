@@ -17,6 +17,14 @@ export const userApi = {
     return response.data;
   },
 
+  changePassword: async (data: {
+    currentPassword: string;
+    newPassword: string;
+  }) => {
+    const response = await api.patch("/users/password", data);
+    return response.data;
+  },
+
   getAllUsers: async (): Promise<User[]> => {
     const response = await api.get("/users");
     return response.data;

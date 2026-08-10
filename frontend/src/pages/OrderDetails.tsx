@@ -156,15 +156,15 @@ export default function OrderDetails() {
                   key={item.id}
                   className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center"
                 >
-                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100">
-                    {item.product?.imageUrl ? (
+                  <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gray-100">
+                    {item.product?.image ? (
                       <img
-                        src={item.product.imageUrl}
-                        alt={item.product.name}
-                        className="h-full w-full object-cover"
+                        src={item.product.image}
+                        alt={item.product.name ?? "Product"}
+                        className="max-h-full max-w-full object-contain"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-xs text-gray-400">
+                      <div className="flex h-full w-full items-center justify-center text-xs text-gray-400">
                         No image
                       </div>
                     )}

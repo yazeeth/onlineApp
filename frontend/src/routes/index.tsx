@@ -11,8 +11,28 @@ import Orders from "../pages/Orders";
 import OrderDetails from "../pages/OrderDetails";
 import Profile from "../pages/Profile";
 import Categories from "../pages/Categories";
+import AdminLayout from "../layouts/AdminLayout";
+import ProtectedRoute from "./ProtectedRoute";
+import { useAuthStore } from "../store/authStore";
+import AdminDashboard from "../pages/admin/Dashboard";
+import OrdersManagement from "../pages/admin/OrdersManagement";
+import PaymentsManagement from "../pages/admin/PaymentsManagement";
+import ProductsManagement from "../pages/admin/ProductsManagement";
+import UsersManagement from "../pages/admin/UsersManagement";
+import type { ReactNode } from "react";
 
-// Add application routes here after confirming available page components.
+function CustomerOnly({ children }: { children: ReactNode }) {
+  const { user } = useAuthStore();
+  const isAdmin = String(user?.role ?? "").toUpperCase() === "ADMIN";
+
+  if (isAdmin) {
+    return <Home />;
+  }
+
+  return <>{children}</>;
+}
+
+// Customer and admin application routes.
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,19 +64,35 @@ const router = createBrowserRouter([
       },
       {
         path: "cart",
-        element: <Cart />,
+        element: (
+          <CustomerOnly>
+            <Cart />
+          </CustomerOnly>
+        ),
       },
       {
         path: "checkout",
-        element: <Checkout />,
+        element: (
+          <CustomerOnly>
+            <Checkout />
+          </CustomerOnly>
+        ),
       },
       {
         path: "orders",
-        element: <Orders />,
+        element: (
+          <CustomerOnly>
+            <Orders />
+          </CustomerOnly>
+        ),
       },
       {
         path: "orders/:id",
-        element: <OrderDetails />,
+        element: (
+          <CustomerOnly>
+            <OrderDetails />
+          </CustomerOnly>
+        ),
       },
       {
         path: "profile",
@@ -65,6 +101,37 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <Home />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <ProtectedRoute adminOnly />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          {
+            index: true,
+            element: <AdminDashboard />,
+          },
+          {
+            path: "products",
+            element: <ProductsManagement />,
+          },
+          {
+            path: "orders",
+            element: <OrdersManagement />,
+          },
+          {
+            path: "users",
+            element: <UsersManagement />,
+          },
+          {
+            path: "payments",
+            element: <PaymentsManagement />,
+          },
+        ],
       },
     ],
   },

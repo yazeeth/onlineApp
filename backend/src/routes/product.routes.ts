@@ -5,16 +5,30 @@ import {
     getAllProducts,
     getSingleProduct,
     editProduct,
-    removeProduct
+    removeProduct,
+    restoreProductController,
+    permanentlyDeleteProductController,
+    uploadProductImage
 } from "../controllers/product.controller";
 
 import { authMiddleware } from "../middleware/auth.middleware";
 import { requireAdmin } from "../middleware/role.middleware";
 
+import { uploadProductImage as uploadProductImageMiddleware } from "../middleware/upload.middleware";
+
 
 const router = Router();
 
 
+
+// Admin only - upload product image
+router.post(
+    "/upload-image",
+    authMiddleware,
+    requireAdmin,
+    uploadProductImageMiddleware.single("file"),
+    uploadProductImage
+);
 
 // Admin only - create product
 /**
@@ -173,6 +187,22 @@ router.put(
 );
 
 
+
+// Admin only - restore archived product
+router.patch(
+    "/:id/restore",
+    authMiddleware,
+    requireAdmin,
+    restoreProductController
+);
+
+// Admin only - permanently delete product
+router.delete(
+    "/:id/permanent",
+    authMiddleware,
+    requireAdmin,
+    permanentlyDeleteProductController
+);
 
 // Admin only - delete product
 /**

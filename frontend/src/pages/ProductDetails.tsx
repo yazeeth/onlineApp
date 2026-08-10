@@ -17,6 +17,7 @@ type DisplayProduct = {
   price: number;
   stock: number;
   imageUrl?: string | null;
+  image?: string | null;
   category?: ProductCategory | null;
 };
 
@@ -25,6 +26,7 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const { addItem } = useCart();
   const { user } = useAuthStore();
+  const isAdmin = String(user?.role ?? "").toUpperCase() === "ADMIN";
   const { products, isLoading, error } = useProducts();
   const [quantity, setQuantity] = useState(1);
 
@@ -88,6 +90,15 @@ export default function ProductDetails() {
     });
   };
 
+  const productImage = product.imageUrl ?? product.image ?? null;
+  const productImageUrl = productImage
+    ? /^https?:\/\//i.test(productImage)
+      ? productImage
+      : productImage.startsWith("/")
+        ? productImage
+        : `/${productImage}`
+    : null;
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <Link
@@ -100,11 +111,11 @@ export default function ProductDetails() {
       <div className="overflow-hidden rounded-3xl border bg-white shadow-sm">
         <div className="grid md:grid-cols-2">
           <div className="bg-gray-50 p-6 sm:p-10">
-            {product.imageUrl ? (
+            {productImage ? (
               <img
-                src={product.imageUrl}
+                src={productImageUrl ?? undefined}
                 alt={product.name}
-                className="h-[28rem] w-full rounded-2xl object-cover"
+                className="h-[28rem] w-full rounded-2xl object-contain bg-gray-50"
               />
             ) : (
               <div className="flex h-[28rem] w-full items-center justify-center rounded-2xl bg-gray-100 text-gray-500">
@@ -146,77 +157,98 @@ export default function ProductDetails() {
               </p>
             </div>
 
-            <div className="mt-8 border-t pt-6">
-              <label htmlFor="quantity" className="text-sm font-semibold">
-                Quantity
-              </label>
+            {!isAdmin && (
+              <div className="mt-8 border-t pt-6">
+                <label htmlFor="quantity" className="text-sm font-semibold">
+                  Quantity
+                </label>
 
-              <div className="mt-3 flex items-center gap-3">
+                <div className="mt-3 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(quantity - 1)}
+                    disabled={product.stock <= 0 || quantity <= 1}
+                    className="h-11 w-11 rounded-xl border font-semibold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    −
+                  </button>
+
+                  <input
+                    id="quantity"
+                    type="number"
+                    min="1"
+                    max={Math.max(product.stock, 1)}
+                    value={quantity}
+                    disabled={product.stock <= 0}
+                    onChange={(event) =>
+                      handleQuantityChange(Number(event.target.value))
+                    }
+                    className="h-11 w-20 rounded-xl border text-center outline-none focus:border-gray-950 focus:ring-2 focus:ring-gray-200"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(quantity + 1)}
+                    disabled={product.stock <= 0 || quantity >= product.stock}
+                    className="h-11 w-11 rounded-xl border font-semibold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    +
+                  </button>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                  disabled={product.stock <= 0 || quantity <= 1}
-                  className="h-11 w-11 rounded-xl border font-semibold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  onClick={handleAddToCart}
+                  disabled={product.stock <= 0 || addItem.isPending}
+                  className="mt-5 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  −
+                  {product.stock <= 0
+                    ? "Out of Stock"
+                    : addItem.isPending
+                      ? "Adding to Cart..."
+                      : "Add to Cart"}
                 </button>
 
-                <input
-                  id="quantity"
-                  type="number"
-                  min="1"
-                  max={Math.max(product.stock, 1)}
-                  value={quantity}
-                  disabled={product.stock <= 0}
-                  onChange={(event) =>
-                    handleQuantityChange(Number(event.target.value))
-                  }
-                  className="h-11 w-20 rounded-xl border text-center outline-none focus:border-gray-950 focus:ring-2 focus:ring-gray-200"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                  disabled={product.stock <= 0 || quantity >= product.stock}
-                  className="h-11 w-11 rounded-xl border font-semibold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  +
-                </button>
+                {user ? (
+                  <Link
+                    to="/cart"
+                    className="mt-3 block w-full rounded-xl border px-5 py-3.5 text-center text-sm font-semibold hover:bg-gray-50"
+                  >
+                    View Cart
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toast.info("Please log in to view your cart.");
+                      navigate("/login");
+                    }}
+                    className="mt-3 block w-full rounded-xl border px-5 py-3.5 text-center text-sm font-semibold hover:bg-gray-50"
+                  >
+                    View Cart
+                  </button>
+                )}
               </div>
-
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                disabled={product.stock <= 0 || addItem.isPending}
-                className="mt-5 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {product.stock <= 0
-                  ? "Out of Stock"
-                  : addItem.isPending
-                    ? "Adding to Cart..."
-                    : "Add to Cart"}
-              </button>
-
-              {user ? (
-                <Link
-                  to="/cart"
-                  className="mt-3 block w-full rounded-xl border px-5 py-3.5 text-center text-sm font-semibold hover:bg-gray-50"
-                >
-                  View Cart
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    toast.info("Please log in to view your cart.");
-                    navigate("/login");
-                  }}
-                  className="mt-3 block w-full rounded-xl border px-5 py-3.5 text-center text-sm font-semibold hover:bg-gray-50"
-                >
-                  View Cart
-                </button>
-              )}
-            </div>
+            )}
+            {isAdmin && (
+              <div className="mt-8 border-t pt-6">
+                <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
+                  <p className="text-sm font-semibold text-blue-900">
+                    Admin view
+                  </p>
+                  <p className="mt-1 text-sm text-blue-800">
+                    You can browse product information here. Customer purchasing
+                    and cart actions are disabled for admin accounts.
+                  </p>
+                  <Link
+                    to="/admin"
+                    className="mt-4 inline-flex rounded-xl bg-gray-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-700"
+                  >
+                    Open Admin Portal
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

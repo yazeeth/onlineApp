@@ -53,6 +53,7 @@ model Product {
   price       Float
   stock       Int
   image       String?
+  active      Boolean  @default(true)
   categoryId  Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
@@ -156,12 +157,14 @@ model OrderItem {
   id Int @id @default(autoincrement())
 
   orderId   Int
-  productId Int
+  productId Int?
 
-  quantity Int
-  price    Float
+  productName  String
+  productImage String?
+  quantity     Int
+  price        Float
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 }

@@ -22,16 +22,19 @@ export const createProduct = async (
     }
 
     const product = await prisma.product.create({
-
         data: {
             name,
             description,
             price,
             stock,
             image,
-            categoryId
+            active: true,
+            category: {
+                connect: {
+                    id: categoryId
+                }
+            }
         }
-
     });
 
 
@@ -57,6 +60,9 @@ export const getProducts = async (
         take: limit,
         where: {
             AND: [
+                {
+                    active: true
+                },
                 search
                     ? {
                         name: {
@@ -67,7 +73,9 @@ export const getProducts = async (
                     : {},
                 categoryId
                     ? {
-                        categoryId
+                        category: {
+                            id: categoryId
+                        }
                     }
                     : {}
             ]
@@ -80,6 +88,9 @@ export const getProducts = async (
     const total = await prisma.product.count({
         where: {
             AND: [
+                {
+                    active: true
+                },
                 search
                     ? {
                         name: {
@@ -90,7 +101,9 @@ export const getProducts = async (
                     : {},
                 categoryId
                     ? {
-                        categoryId
+                        category: {
+                            id: categoryId
+                        }
                     }
                     : {}
             ]
@@ -151,19 +164,13 @@ export const updateProduct = async (
     id: number,
 
     data: {
-
         name?: string;
-
         description?: string;
-
         price?: number;
-
         stock?: number;
-
         image?: string;
-
+        imageUrl?: string;
         categoryId?: number;
-
     }
 
 ) => {
@@ -206,75 +213,117 @@ export const updateProduct = async (
     }
 
 
-
-
+    const { categoryId, imageUrl, ...productData } = data;
 
     return await prisma.product.update({
-
-        where:{
+        where: {
             id
         },
-
-        data
-
+        data: {
+            ...productData,
+            ...(imageUrl !== undefined ? { image: imageUrl } : {}),
+            ...(categoryId !== undefined
+                ? {
+                    category: {
+                        connect: {
+                            id: categoryId
+                        }
+                    }
+                }
+                : {})
+        }
     });
-
-
 };
 
 
-
-
-
-
-
-export const deleteProduct = async (
-
-    id:number
-
+export const archiveProduct = async (
+    id: number
 ) => {
-
-
-
     const product = await prisma.product.findUnique({
-
-        where:{
+        where: {
             id
         }
-
     });
 
-
-
-
-    if(!product){
-
-        throw new Error(
-            "Product not found"
-        );
-
+    if (!product) {
+        throw new Error("Product not found");
     }
 
-
-
-
-
-    await prisma.product.delete({
-
-        where:{
+    await prisma.product.update({
+        where: {
             id
+        },
+        data: {
+            active: false as boolean
         }
-
     });
 
+    return {
+        message: "Product archived successfully"
+    };
+};
 
+export const restoreProduct = async (
+    id: number
+) => {
+    const product = await prisma.product.findUnique({
+        where: {
+            id
+        }
+    });
 
+    if (!product) {
+        throw new Error("Product not found");
+    }
+
+    await prisma.product.update({
+        where: {
+            id
+        },
+        data: {
+            active: true as boolean
+        }
+    });
 
     return {
-
-        message:"Product deleted successfully"
-
+        message: "Product restored successfully"
     };
+};
 
+export const permanentlyDeleteProduct = async (
+    id: number
+) => {
+    const product = await prisma.product.findUnique({
+        where: {
+            id
+        },
+        include: {
+            orderItems: {
+                select: {
+                    id: true
+                },
+                take: 1
+            }
+        }
+    });
 
+    if (!product) {
+        throw new Error("Product not found");
+    }
+
+    if (product.orderItems.length > 0) {
+        throw new Error(
+            "Product cannot be permanently deleted because it is referenced by historical orders"
+        );
+    }
+
+    await prisma.product.delete({
+        where: {
+            id
+        }
+    });
+
+    return {
+        message: "Product permanently deleted successfully"
+    };
 };

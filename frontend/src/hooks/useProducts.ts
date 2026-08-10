@@ -7,7 +7,13 @@ export const useProducts = () => {
 
   const productsQuery = useQuery({
     queryKey: ["products"],
-    queryFn: productApi.getAllProducts,
+    queryFn: async () => {
+      const products = await productApi.getAllProducts();
+      return products.map((product) => ({
+        ...product,
+        imageUrl: product.image ?? product.imageUrl ?? null,
+      }));
+    },
   });
 
 

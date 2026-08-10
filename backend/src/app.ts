@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import cors from "cors";
 import userRoutes from "./routes/user.routes";
 import authRoutes from "./routes/auth.routes";
@@ -15,12 +16,22 @@ import { env } from "./config/env";
 
 const app = express();
 
-app.use(helmet());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: {
+            policy: "cross-origin"
+        }
+    })
+);
 app.use(cors({
     origin: ["http://localhost:5173"],
     credentials: true
 }));
 app.use(express.json());
+app.use(
+    "/uploads",
+    express.static(path.resolve(process.cwd(), "uploads"))
+);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);

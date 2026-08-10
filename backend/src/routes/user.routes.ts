@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, getProfile, updateProfile, updateUserRoleController, getAllUsersController } from "../controllers/user.controller";
+import { registerUser, getProfile, updateProfile, changePassword, updateUserRoleController, getAllUsersController } from "../controllers/user.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { requireAdmin } from "../middleware/role.middleware";
 
@@ -94,6 +94,7 @@ router.get("/profile", authMiddleware, getProfile);
  *         description: Unauthorized
  */
 router.patch("/profile", authMiddleware, updateProfile);
+router.patch("/password", authMiddleware, changePassword);
 /**
  * @swagger
  * /api/users:

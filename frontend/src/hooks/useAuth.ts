@@ -10,14 +10,25 @@ export const useAuth = () => {
     mutationFn: (data: LoginRequest) => authApi.login(data),
     onSuccess: (data) => {
       if (data.user) {
-        setAuth(
-          data.user,
-          data.accessToken,
-          data.refreshToken,
-        );
+        setAuth(data.user, data.accessToken, data.refreshToken);
       }
     },
   });
+
+  const login = (
+    data: LoginRequest,
+    options?: {
+      onSuccess?: (user: NonNullable<ReturnType<typeof authApi.login> extends Promise<infer T> ? T extends { user?: infer U } ? U : never : never>) => void;
+    },
+  ) => {
+    loginMutation.mutate(data, {
+      onSuccess: (response) => {
+        if (response.user && options?.onSuccess) {
+          options.onSuccess(response.user);
+        }
+      },
+    });
+  };
 
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),
@@ -28,7 +39,7 @@ export const useAuth = () => {
 
   return {
     user,
-    login: loginMutation.mutate,
+    login,
     loginLoading: loginMutation.isPending,
     loginError: loginMutation.error,
     logout: logoutMutation.mutate,

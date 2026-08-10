@@ -1,13 +1,42 @@
 import { Request, Response } from "express";
+import path from "path";
 
 import {
     createProduct,
     getProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    archiveProduct,
+    restoreProduct,
+    permanentlyDeleteProduct
 } from "../services/product.service";
 
+
+// Upload Product Image
+export const uploadProductImage = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        if (!req.file) {
+            res.status(400).json({
+                message: "Product image is required."
+            });
+            return;
+        }
+
+        const imageUrl = `/uploads/products/${path.basename(req.file.filename)}`;
+
+        res.status(201).json({
+            message: "Product image uploaded successfully",
+            url: imageUrl
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+};
 
 
 // Create Product
@@ -178,7 +207,7 @@ export const editProduct = async (
 
 
 
-// Delete Product
+// Archive Product
 export const removeProduct = async (
     req: Request,
     res: Response
@@ -188,22 +217,51 @@ export const removeProduct = async (
 
         const id = Number(req.params.id);
 
-
-        const result = await deleteProduct(id);
-
+        const result = await archiveProduct(id);
 
         res.json(result);
-
-
 
     } catch(error:any){
 
         res.status(400).json({
-
             message:error.message
-
         });
 
     }
 
+};
+
+// Restore Product
+export const restoreProductController = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const id = Number(req.params.id);
+
+        const result = await restoreProduct(id);
+
+        res.json(result);
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+};
+// Permanently Delete Product
+export const permanentlyDeleteProductController = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const id = Number(req.params.id);
+
+        const result = await permanentlyDeleteProduct(id);
+
+        res.json(result);
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
 };

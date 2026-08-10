@@ -7,6 +7,11 @@ export const orderApi = {
     return response.data;
   },
 
+  getAllOrdersAdmin: async (): Promise<Order[]> => {
+    const response = await api.get("/orders/admin/all");
+    return response.data;
+  },
+
   getOrder: async (id: number): Promise<Order> => {
     const response = await api.get(`/orders/${id}`);
     return response.data;

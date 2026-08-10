@@ -21,6 +21,14 @@ export const productApi = {
     return response.data;
   },
 
+  uploadProductImage: async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+
+    const response = await api.post("/products/upload-image", formData);
+    return response.data.url;
+  },
+
   updateProduct: async (
     id: number,
     data: UpdateProductRequest,
@@ -30,7 +38,23 @@ export const productApi = {
   },
 
   deleteProduct: async (id: number) => {
+    return productApi.archiveProduct(id);
+  },
+
+  archiveProduct: async (id: number) => {
     const response = await api.delete(`/products/${id}`);
+    return response.data;
+  },
+
+  restoreProduct: async (id: number) => {
+    const response = await api.patch(`/products/${id}/restore`);
+    return response.data;
+  },
+
+  permanentlyDeleteProduct: async (id: number, password: string) => {
+    const response = await api.delete(`/products/${id}/permanent`, {
+      data: { password },
+    });
     return response.data;
   },
 };

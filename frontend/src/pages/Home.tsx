@@ -7,6 +7,7 @@ export default function Home() {
   const { products, isLoading: productsLoading, error: productsError } = useProducts();
   const { categories, isLoading: categoriesLoading, error: categoriesError } = useCategories();
   const { user } = useAuth();
+  const isAdmin = String(user?.role ?? "").toUpperCase() === "ADMIN";
 
   const categoryList = Array.isArray(categories) ? categories : [];
   const productList = Array.isArray(products) ? products : [];
@@ -25,6 +26,14 @@ export default function Home() {
 
   const typedProducts = productList as HomeProduct[];
 
+  const getProductImageUrl = (imageUrl?: string | null) => {
+    if (!imageUrl) return null;
+    if (/^https?:\/\//i.test(imageUrl)) return imageUrl;
+
+    const normalizedPath = imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`;
+    return normalizedPath;
+  };
+
   return (
     <div className="space-y-16">
       <section className="overflow-hidden rounded-3xl bg-gray-950 px-6 py-16 text-white sm:px-10 lg:px-16 lg:py-24">
@@ -36,15 +45,16 @@ export default function Home() {
             Everything you need, in one place.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-300 sm:text-lg">
-            Discover products, manage your cart, complete checkout, and keep track
-            of your orders from one simple shopping experience.
+            {isAdmin
+              ? "Browse the product catalogue and manage your store from the admin portal."
+              : "Discover products, manage your cart, complete checkout, and keep track of your orders from one simple shopping experience."}
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               to="/products"
               className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-gray-950 hover:bg-gray-200"
             >
-              Shop Products
+              {isAdmin ? "View Products" : "Shop Products"}
             </Link>
             <Link
               to="/categories"
@@ -52,6 +62,14 @@ export default function Home() {
             >
               Browse Categories
             </Link>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold hover:bg-white/10"
+              >
+                Admin Portal
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -60,24 +78,37 @@ export default function Home() {
         <section className="rounded-2xl border bg-white p-6 shadow-sm">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
             <div>
-              <p className="text-sm font-medium text-gray-500">Your account</p>
+              <p className="text-sm font-medium text-gray-500">
+                {isAdmin ? "Admin account" : "Your account"}
+              </p>
               <h2 className="mt-1 text-2xl font-bold">
                 Welcome back, {user.name || user.email} 👋
               </h2>
               <p className="mt-2 text-sm text-gray-600">
-                Continue shopping or manage your account and orders.
+                {isAdmin
+                  ? "Browse the store as a viewer or manage products, orders, users, and payments from the admin portal."
+                  : "Continue shopping or manage your account and orders."}
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link
-                to="/orders"
-                className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
-              >
-                My Orders
-              </Link>
+              {isAdmin ? (
+                <Link
+                  to="/admin"
+                  className="rounded-xl bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700"
+                >
+                  Admin Portal
+                </Link>
+              ) : (
+                <Link
+                  to="/orders"
+                  className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+                >
+                  My Orders
+                </Link>
+              )}
               <Link
                 to="/profile"
-                className="rounded-xl bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700"
+                className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
               >
                 My Profile
               </Link>
@@ -210,11 +241,11 @@ export default function Home() {
                 key={product.id}
                 className="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
-                {product.imageUrl ? (
+                {getProductImageUrl(product.imageUrl) ? (
                   <img
-                    src={product.imageUrl}
+                    src={getProductImageUrl(product.imageUrl) ?? undefined}
                     alt={product.name}
-                    className="h-56 w-full object-cover"
+                    className="h-56 w-full object-contain bg-gray-50"
                   />
                 ) : (
                   <div className="flex h-56 w-full items-center justify-center bg-gray-100 text-sm text-gray-500">
@@ -256,25 +287,45 @@ export default function Home() {
           <div className="text-2xl">🛍️</div>
           <h3 className="mt-4 font-semibold">Products</h3>
           <p className="mt-2 text-sm leading-6 text-gray-600">
-            Explore the complete product catalogue.
+            {isAdmin ? "Browse the complete product catalogue." : "Explore the complete product catalogue."}
           </p>
         </Link>
 
-        <Link to="/cart" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-          <div className="text-2xl">🛒</div>
-          <h3 className="mt-4 font-semibold">Shopping Cart</h3>
-          <p className="mt-2 text-sm leading-6 text-gray-600">
-            Review your selected products before checkout.
-          </p>
-        </Link>
+        {isAdmin ? (
+          <Link to="/categories" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
+            <div className="text-2xl">🏷️</div>
+            <h3 className="mt-4 font-semibold">Categories</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Browse products by category.
+            </p>
+          </Link>
+        ) : (
+          <Link to="/cart" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
+            <div className="text-2xl">🛒</div>
+            <h3 className="mt-4 font-semibold">Shopping Cart</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Review your selected products before checkout.
+            </p>
+          </Link>
+        )}
 
-        <Link to="/orders" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-          <div className="text-2xl">📦</div>
-          <h3 className="mt-4 font-semibold">My Orders</h3>
-          <p className="mt-2 text-sm leading-6 text-gray-600">
-            Track your order history and view order details.
-          </p>
-        </Link>
+        {isAdmin ? (
+          <Link to="/admin" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
+            <div className="text-2xl">⚙️</div>
+            <h3 className="mt-4 font-semibold">Admin Portal</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Manage products, orders, users, and payments.
+            </p>
+          </Link>
+        ) : (
+          <Link to="/orders" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
+            <div className="text-2xl">📦</div>
+            <h3 className="mt-4 font-semibold">My Orders</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Track your order history and view order details.
+            </p>
+          </Link>
+        )}
 
         <Link to="/profile" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
           <div className="text-2xl">👤</div>
@@ -286,15 +337,19 @@ export default function Home() {
       </section>
 
       <section className="rounded-2xl border bg-gray-100 p-8 text-center sm:p-12">
-        <h2 className="text-3xl font-bold">Ready to start shopping?</h2>
+        <h2 className="text-3xl font-bold">
+          {isAdmin ? "Ready to manage your store?" : "Ready to start shopping?"}
+        </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-gray-600 sm:text-base">
-          Browse our products and find something that fits what you need.
+          {isAdmin
+            ? "Open the admin portal to manage your OnlineShop operations."
+            : "Browse our products and find something that fits what you need."}
         </p>
         <Link
-          to="/products"
+          to={isAdmin ? "/admin" : "/products"}
           className="mt-6 inline-block rounded-xl bg-gray-950 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700"
         >
-          Start Shopping
+          {isAdmin ? "Open Admin Portal" : "Start Shopping"}
         </Link>
       </section>
     </div>

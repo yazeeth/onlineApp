@@ -1,7 +1,6 @@
 import prisma from "../config/database";
 import bcrypt from "bcrypt";
 
-
 export const createUser = async (
     name: string,
     email: string,
@@ -42,6 +41,58 @@ export const createUser = async (
 
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
+};
+
+export const changeUserPassword = async (
+    userId: number,
+    currentPassword: string,
+    newPassword: string
+) => {
+    if (!currentPassword || !newPassword) {
+        throw new Error("Current password and new password are required");
+    }
+
+    if (newPassword.length < 8) {
+        throw new Error("New password must be at least 8 characters long");
+    }
+
+    if (currentPassword === newPassword) {
+        throw new Error("New password must be different from current password");
+    }
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            id: true,
+            password: true
+        }
+    });
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const passwordMatches = await bcrypt.compare(
+        currentPassword,
+        user.password
+    );
+
+    if (!passwordMatches) {
+        throw new Error("Current password is incorrect");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: {
+            password: hashedPassword
+        }
+    });
 };
 
 export const updateUserRole = async (

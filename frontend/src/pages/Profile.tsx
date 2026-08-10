@@ -13,6 +13,12 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordSuccess, setPasswordSuccess] = useState("");
 
   const [profile, setProfile] = useState<ProfileData>({
     name: "",
@@ -50,6 +56,49 @@ function Profile() {
 
     void loadProfile();
   }, []);
+
+  const handleChangePassword = async () => {
+    try {
+      setError("");
+      setPasswordSuccess("");
+
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        setError("Please fill in all password fields.");
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        setError("New password must be at least 8 characters long.");
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        setError("New password and confirmation do not match.");
+        return;
+      }
+
+      setPasswordSaving(true);
+
+      const response = await userApi.changePassword({
+        currentPassword,
+        newPassword,
+      });
+
+      setPasswordSuccess(
+        response?.message || "Password changed successfully."
+      );
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setShowPasswordForm(false);
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message || "Unable to change your password."
+      );
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
 
   const handleCancel = () => {
     setProfile(originalProfile);
@@ -228,12 +277,100 @@ function Profile() {
               Keep your account protected with a strong password.
             </p>
 
-            <button
-              type="button"
-              className="mt-5 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-            >
-              Change Password
-            </button>
+            {passwordSuccess && (
+              <div className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                {passwordSuccess}
+              </div>
+            )}
+
+            {showPasswordForm && (
+              <div className="mt-5 space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-5">
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700">
+                    Current Password
+                  </span>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    disabled={passwordSaving}
+                    onChange={(event) => setCurrentPassword(event.target.value)}
+                    autoComplete="current-password"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-black disabled:bg-gray-100"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700">
+                    New Password
+                  </span>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    disabled={passwordSaving}
+                    onChange={(event) => setNewPassword(event.target.value)}
+                    autoComplete="new-password"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-black disabled:bg-gray-100"
+                  />
+                  <span className="mt-1 block text-xs text-gray-500">
+                    Minimum 8 characters.
+                  </span>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700">
+                    Confirm New Password
+                  </span>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    disabled={passwordSaving}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    autoComplete="new-password"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-black disabled:bg-gray-100"
+                  />
+                </label>
+
+                <div className="flex flex-col-reverse gap-3 border-t pt-4 sm:flex-row sm:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentPassword("");
+                      setNewPassword("");
+                      setConfirmPassword("");
+                      setError("");
+                      setPasswordSuccess("");
+                      setShowPasswordForm(false);
+                    }}
+                    disabled={passwordSaving}
+                    className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleChangePassword}
+                    disabled={passwordSaving}
+                    className="rounded-lg bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {passwordSaving ? "Changing..." : "Change Password"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!showPasswordForm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setError("");
+                  setPasswordSuccess("");
+                  setShowPasswordForm(true);
+                }}
+                className="mt-5 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                Change Password
+              </button>
+            )}
           </section>
 
           <section className="rounded-2xl bg-white p-6 shadow-sm">
