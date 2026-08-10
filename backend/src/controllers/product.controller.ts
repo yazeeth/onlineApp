@@ -53,7 +53,7 @@ export const addProduct = async (
             description,
             price,
             stock,
-            image,
+            imageUrl,
             categoryId
         } = req.body;
 
@@ -63,7 +63,7 @@ export const addProduct = async (
             description,
             price,
             stock,
-            image,
+            imageUrl,
             categoryId
         );
 
