@@ -1,5 +1,12 @@
 import { Request, Response } from "express";
-import { createUser, changeUserPassword, updateUserRole, getAllUsers } from "../services/user.service";
+import {
+    createUser,
+    changeUserPassword,
+    updateUserRole,
+    getAllUsers,
+    updateUser,
+    deleteUser
+} from "../services/user.service";
 import prisma from "../config/database";
 
 export const registerUser = async (
@@ -214,6 +221,75 @@ export const updateUserRoleController = async (
         });
     }
 
+};
+
+export const updateUserController = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const userId = Number(req.params.id);
+        const { name, email, phone } = req.body;
+
+        if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({
+                message: "Invalid user ID"
+            });
+        }
+
+        if (typeof name !== "string" || typeof email !== "string" || typeof phone !== "string") {
+            return res.status(400).json({
+                message: "Name, email, and phone must be strings"
+            });
+        }
+
+        const user = await updateUser(
+            userId,
+            name,
+            email,
+            phone
+        );
+
+        return res.json({
+            message: "User updated successfully",
+            user
+        });
+    } catch (error: any) {
+        const message = error.message || "Unable to update user";
+        const status = message === "User not found" ? 404 : 400;
+
+        return res.status(status).json({
+            message
+        });
+    }
+};
+
+export const deleteUserController = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const userId = Number(req.params.id);
+
+        if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({
+                message: "Invalid user ID"
+            });
+        }
+
+        await deleteUser(userId);
+
+        return res.json({
+            message: "User deleted successfully"
+        });
+    } catch (error: any) {
+        const message = error.message || "Unable to delete user";
+        const status = message === "User not found" ? 404 : 400;
+
+        return res.status(status).json({
+            message
+        });
+    }
 };
 
 export const getAllUsersController = async (

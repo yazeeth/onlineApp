@@ -299,7 +299,7 @@ export default function Dashboard() {
                   return (
                     <Link
                       key={String(orderWithMeta.id)}
-                      to={`/orders/${orderWithMeta.id}`}
+                      to="/admin/orders"
                       className="block px-6 py-5 transition hover:bg-gray-50"
                     >
                       <div className="grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center md:gap-6">

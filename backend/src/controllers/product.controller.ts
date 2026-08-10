@@ -4,6 +4,7 @@ import path from "path";
 import {
     createProduct,
     getProducts,
+    getAllProductsForAdmin,
     getProductById,
     updateProduct,
     archiveProduct,
@@ -122,9 +123,23 @@ export const getAllProducts = async (
 
 };
 
+// Get all products for admin, including archived products
+export const getAllProductsForAdminController = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const products = await getAllProductsForAdmin();
 
-
-
+        res.json({
+            products
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+};
 
 
 // Get single product

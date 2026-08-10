@@ -1,5 +1,14 @@
 import { Router } from "express";
-import { registerUser, getProfile, updateProfile, changePassword, updateUserRoleController, getAllUsersController } from "../controllers/user.controller";
+import {
+    registerUser,
+    getProfile,
+    updateProfile,
+    changePassword,
+    updateUserRoleController,
+    getAllUsersController,
+    updateUserController,
+    deleteUserController
+} from "../controllers/user.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { requireAdmin } from "../middleware/role.middleware";
 
@@ -119,6 +128,10 @@ router.patch("/password", authMiddleware, changePassword);
  *         description: Admin access required
  */
 router.get("/", authMiddleware, requireAdmin, getAllUsersController);
+
+router.patch("/:id", authMiddleware, requireAdmin, updateUserController);
+router.delete("/:id", authMiddleware, requireAdmin, deleteUserController);
+
 /**
  * @swagger
  * /api/users/{id}/role:

@@ -124,6 +124,81 @@ export const updateUserRole = async (
     return userWithoutPassword;
 };
 
+export const updateUser = async (
+    userId: number,
+    name: string,
+    email: string,
+    phone: string
+) => {
+    if (!name?.trim() || !email?.trim() || !phone?.trim()) {
+        throw new Error("Name, email, and phone are required");
+    }
+
+    const existingUser = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
+
+    if (!existingUser) {
+        throw new Error("User not found");
+    }
+
+    const emailOwner = await prisma.user.findUnique({
+        where: {
+            email: email.trim()
+        }
+    });
+
+    if (emailOwner && emailOwner.id !== userId) {
+        throw new Error("Email already registered");
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: {
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim()
+        }
+    });
+
+    const { password: _, ...userWithoutPassword } = updatedUser;
+    return userWithoutPassword;
+};
+
+export const deleteUser = async (userId: number) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        include: {
+            orders: {
+                select: {
+                    id: true
+                },
+                take: 1
+            }
+        }
+    });
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    if (user.orders.length > 0) {
+        throw new Error("Cannot delete a user with existing orders");
+    }
+
+    await prisma.user.delete({
+        where: {
+            id: userId
+        }
+    });
+};
+
 export const getAllUsers = async () => {
 
     const users = await prisma.user.findMany({

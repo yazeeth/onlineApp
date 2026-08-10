@@ -4,8 +4,10 @@ import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `relative whitespace-nowrap text-sm font-semibold transition ${
-    isActive ? "text-gray-950" : "text-gray-500 hover:text-gray-950"
+  `relative whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold transition ${
+    isActive
+      ? "bg-brand-50 text-brand-700"
+      : "text-gray-600 hover:bg-gray-50 hover:text-brand-700"
   }`;
 
 export default function Header() {
@@ -36,7 +38,7 @@ export default function Header() {
           <Link
             to="/"
             onClick={closeMobile}
-            className="shrink-0 text-xl font-black tracking-tight text-gray-950 sm:text-2xl"
+            className="shrink-0 text-xl font-black tracking-tight text-brand-600 transition hover:text-brand-700 sm:text-2xl"
             aria-label="OnlineShop home"
           >
             OnlineShop
@@ -59,14 +61,14 @@ export default function Header() {
           {!isAdmin && (
             <Link
               to="/cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-gray-700 transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-950"
+              className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-gray-700 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
               aria-label={cartItemCount > 0 ? `Shopping cart, ${cartItemCount} items` : "Shopping cart"}
             >
               <span aria-hidden="true" className="text-xl leading-none">
                 🛒
               </span>
               {cartItemCount > 0 && (
-                <span className="absolute -right-1.5 -top-1.5 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-gray-950 px-1.5 text-[10px] font-bold leading-5 text-white ring-2 ring-white">
+                <span className="absolute -right-1.5 -top-1.5 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1.5 text-[10px] font-bold leading-5 text-white ring-2 ring-white">
                   {cartItemCount > 99 ? "99+" : cartItemCount}
                 </span>
               )}
@@ -80,9 +82,9 @@ export default function Header() {
                 onClick={() => setAccountOpen((open) => !open)}
                 aria-expanded={accountOpen}
                 aria-haspopup="menu"
-                className="flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-2.5 transition hover:border-gray-300 hover:bg-gray-50 sm:px-3"
+                className="flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-2.5 transition hover:border-brand-200 hover:bg-brand-50 sm:px-3"
               >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-950 text-xs font-bold text-white">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
                   {(user.name || user.email).charAt(0).toUpperCase()}
                 </span>
                 <span className="hidden max-w-32 truncate text-sm font-semibold text-gray-800 lg:inline">
@@ -151,7 +153,7 @@ export default function Header() {
                       <Link
                         to="/admin"
                         onClick={() => setAccountOpen(false)}
-                        className="flex items-center justify-between rounded-xl bg-gray-950 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800"
+                        className="flex items-center justify-between rounded-xl bg-brand-600 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
                         role="menuitem"
                       >
                         Admin Portal
@@ -184,7 +186,7 @@ export default function Header() {
               </Link>
               <Link
                 to="/register"
-                className="rounded-xl bg-gray-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-700"
+                className="rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
               >
                 Register
               </Link>
@@ -197,7 +199,7 @@ export default function Header() {
             aria-expanded={mobileOpen}
             aria-controls="mobile-navigation"
             aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-lg text-gray-700 transition hover:bg-gray-50 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-lg text-gray-700 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 md:hidden"
           >
             {mobileOpen ? "×" : "☰"}
           </button>
@@ -220,11 +222,11 @@ export default function Header() {
               <Link
                 to="/cart"
                 onClick={closeMobile}
-                className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-gray-700 transition hover:bg-brand-50 hover:text-brand-700"
               >
                 <span>Cart</span>
                 {cartItemCount > 0 && (
-                  <span className="rounded-full bg-gray-950 px-2 py-1 text-xs font-bold text-white">
+                  <span className="rounded-full bg-brand-600 px-2 py-1 text-xs font-bold text-white">
                     {cartItemCount > 99 ? "99+" : cartItemCount}
                   </span>
                 )}
@@ -234,7 +236,7 @@ export default function Header() {
               <Link
                 to="/admin"
                 onClick={closeMobile}
-                className="rounded-xl bg-gray-950 px-3 py-3 text-sm font-semibold text-white"
+                className="rounded-xl bg-brand-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-brand-700"
               >
                 Admin Portal
               </Link>
@@ -251,7 +253,7 @@ export default function Header() {
                 <Link
                   to="/register"
                   onClick={closeMobile}
-                  className="rounded-xl bg-gray-950 px-4 py-3 text-center text-sm font-semibold text-white"
+                  className="rounded-xl bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-700"
                 >
                   Register
                 </Link>

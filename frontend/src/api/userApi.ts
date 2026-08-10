@@ -34,4 +34,17 @@ export const userApi = {
     const response = await api.patch(`/users/${id}/role`, data);
     return response.data;
   },
+
+  updateUser: async (
+    id: number,
+    data: { name: string; email: string; phone: string },
+  ) => {
+    const response = await api.patch(`/users/${id}`, data);
+    return response.data;
+  },
+
+  deleteUser: async (id: number) => {
+    const response = await api.delete(`/users/${id}`);
+    return response.data;
+  },
 };

@@ -54,14 +54,14 @@ export default function Cart() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="h-10 w-48 animate-pulse rounded bg-gray-100" />
+        <div className="h-10 w-48 animate-pulse rounded-xl bg-gray-100" />
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <div className="space-y-4">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="h-36 animate-pulse rounded-2xl bg-gray-100" />
+              <div key={item} className="h-36 animate-pulse rounded-2xl border border-gray-200 bg-gray-100" />
             ))}
           </div>
-          <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
+          <div className="h-80 animate-pulse rounded-2xl border border-gray-200 bg-gray-100" />
         </div>
       </div>
     );
@@ -69,7 +69,7 @@ export default function Cart() {
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
         <p className="text-sm font-medium text-red-600">Shopping Cart</p>
         <h1 className="mt-1 text-xl font-semibold text-red-700">Failed to load cart</h1>
         <p className="mt-2 text-sm text-red-600">Please refresh the page and try again.</p>
@@ -79,9 +79,9 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl rounded-3xl border bg-white p-10 text-center shadow-sm sm:p-14">
+      <div className="mx-auto max-w-2xl rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-sm sm:p-14">
         <div className="text-6xl">🛒</div>
-        <p className="mt-5 text-sm font-semibold uppercase tracking-wider text-gray-400">
+        <p className="mt-5 text-sm font-bold uppercase tracking-wider text-brand-600">
           Shopping Cart
         </p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight">Your cart is empty</h1>
@@ -90,7 +90,7 @@ export default function Cart() {
         </p>
         <Link
           to="/products"
-          className="mt-7 inline-block rounded-xl bg-gray-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
+          className="mt-7 inline-block rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
         >
           Start Shopping
         </Link>
@@ -102,21 +102,21 @@ export default function Cart() {
     <div className="space-y-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+          <p className="text-sm font-bold uppercase tracking-wider text-brand-600">
             Your Shopping Cart
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">Cart</h1>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-gray-950">Cart</h1>
           <p className="mt-2 text-gray-600">
             Review your items before continuing to checkout.
           </p>
         </div>
-        <div className="rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700">
+        <div className="rounded-full bg-brand-50 px-4 py-2 text-sm font-bold text-brand-700 ring-1 ring-brand-100">
           {totalQuantity} item{totalQuantity === 1 ? "" : "s"}
         </div>
       </div>
 
       {invalidStockItems.length > 0 && (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm sm:p-5">
           <p className="font-semibold text-amber-900">Cart needs attention</p>
           <p className="mt-1 text-sm leading-6 text-amber-800">
             One or more products are unavailable or have insufficient stock. Adjust the quantities before checkout.
@@ -125,7 +125,7 @@ export default function Cart() {
       )}
 
       {(updateItem.isError || removeItem.isError) && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 sm:p-5">
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 shadow-sm sm:p-5">
           <p className="font-semibold text-red-800">Cart update failed</p>
           <p className="mt-1 text-sm text-red-700">
             We couldn't update your cart. Please try again.
@@ -149,7 +149,7 @@ export default function Cart() {
             return (
               <article
                 key={item.id}
-                className="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md"
+                className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-lg"
               >
                 <div className="flex flex-col gap-5 p-4 sm:flex-row sm:items-center sm:p-5">
                   <Link to={`/products/${product?.id}`} className="shrink-0">
@@ -157,10 +157,10 @@ export default function Cart() {
                       <img
                         src={productImageUrl}
                         alt={product?.name ?? "Product"}
-                        className="h-32 w-full rounded-xl bg-gray-50 object-contain p-1 transition hover:opacity-90 sm:h-28 sm:w-28"
+                        className="h-32 w-full rounded-xl border border-gray-100 bg-gray-50 object-contain p-1 transition duration-300 hover:border-brand-200 hover:opacity-90 sm:h-28 sm:w-28"
                       />
                     ) : (
-                      <div className="flex h-32 w-full items-center justify-center rounded-xl bg-gray-100 text-sm text-gray-500 sm:h-28 sm:w-28">
+                      <div className="flex h-32 w-full items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-500 sm:h-28 sm:w-28">
                         No image
                       </div>
                     )}
@@ -169,37 +169,37 @@ export default function Cart() {
                   <div className="min-w-0 flex-1">
                     <Link
                       to={`/products/${product?.id}`}
-                      className="text-lg font-semibold text-gray-900 hover:underline"
+                      className="text-lg font-bold tracking-tight text-gray-950 transition hover:text-brand-700 hover:underline"
                     >
                       {product?.name ?? "Product"}
                     </Link>
                     <p className="mt-1 text-sm text-gray-500">{formatPrice(price)} each</p>
 
                     {isOutOfStock ? (
-                      <p className="mt-2 text-xs font-semibold text-red-600">Out of stock</p>
+                      <p className="mt-2 text-xs font-bold text-danger-500">Out of stock</p>
                     ) : isOverStock ? (
-                      <p className="mt-2 text-xs font-semibold text-amber-600">
+                      <p className="mt-2 text-xs font-bold text-warning-500">
                         Only {stock} available — reduce quantity
                       </p>
                     ) : isLowStock ? (
-                      <p className="mt-2 text-xs font-semibold text-amber-600">Only {stock} left</p>
+                      <p className="mt-2 text-xs font-bold text-warning-500">Only {stock} left</p>
                     ) : (
-                      <p className="mt-2 text-xs font-medium text-green-600">In stock</p>
+                      <p className="mt-2 text-xs font-semibold text-success-500">In stock</p>
                     )}
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4 sm:border-t-0 sm:pt-0 sm:justify-end">
-                    <div className="flex items-center rounded-xl border border-gray-300 bg-white">
+                    <div className="flex items-center rounded-xl border border-gray-200 bg-white shadow-sm">
                       <button
                         type="button"
                         onClick={() => handleQuantityChange(item, item.quantity - 1)}
                         disabled={item.quantity <= 1 || updateItem.isPending || removeItem.isPending}
                         aria-label={`Decrease quantity of ${product?.name ?? "product"}`}
-                        className="h-10 w-10 font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="h-10 w-10 font-semibold text-gray-700 transition hover:bg-brand-50 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         −
                       </button>
-                      <span className="w-10 text-center text-sm font-semibold text-gray-900">
+                      <span className="w-10 text-center text-sm font-bold text-gray-900">
                         {item.quantity}
                       </span>
                       <button
@@ -212,13 +212,13 @@ export default function Cart() {
                           removeItem.isPending
                         }
                         aria-label={`Increase quantity of ${product?.name ?? "product"}`}
-                        className="h-10 w-10 font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="h-10 w-10 font-semibold text-gray-700 transition hover:bg-brand-50 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         +
                       </button>
                     </div>
 
-                    <p className="min-w-24 text-right font-bold text-gray-900">
+                    <p className="min-w-24 text-right text-lg font-black tracking-tight text-brand-700">
                       {formatPrice(itemTotal)}
                     </p>
 
@@ -226,7 +226,7 @@ export default function Cart() {
                       type="button"
                       onClick={() => removeItem.mutate(item.id)}
                       disabled={removeItem.isPending || updateItem.isPending}
-                      className="rounded-xl border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-xl border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 hover:border-red-300 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {removeItem.isPending ? "Removing..." : "Remove"}
                     </button>
@@ -237,9 +237,9 @@ export default function Cart() {
           })}
         </section>
 
-        <aside className="rounded-2xl border bg-white p-6 shadow-sm lg:sticky lg:top-24">
-          <p className="text-sm font-medium text-gray-500">Order Summary</p>
-          <h2 className="mt-1 text-xl font-bold text-gray-900">Your order</h2>
+        <aside className="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg lg:sticky lg:top-24">
+          <p className="text-sm font-bold uppercase tracking-wider text-brand-600">Order Summary</p>
+          <h2 className="mt-1 text-xl font-black tracking-tight text-gray-950">Your order</h2>
 
           <div className="mt-6 space-y-3 text-sm">
             <div className="flex justify-between gap-4">
@@ -256,10 +256,10 @@ export default function Cart() {
             </div>
           </div>
 
-          <div className="mt-6 border-t pt-5">
+          <div className="mt-6 border-t border-gray-200 pt-5">
             <div className="flex items-center justify-between gap-4">
               <span className="text-lg font-bold text-gray-900">Subtotal</span>
-              <span className="text-2xl font-bold text-gray-950">{formatPrice(subtotal)}</span>
+              <span className="text-2xl font-black tracking-tight text-brand-700">{formatPrice(subtotal)}</span>
             </div>
           </div>
 
@@ -274,7 +274,7 @@ export default function Cart() {
             className={`mt-6 block rounded-xl px-5 py-3.5 text-center text-sm font-semibold transition ${
               invalidStockItems.length > 0
                 ? "cursor-not-allowed bg-gray-200 text-gray-500"
-                : "bg-gray-950 text-white hover:bg-gray-700"
+                : "bg-brand-600 text-white shadow-sm hover:bg-brand-700"
             }`}
           >
             Fix Cart to Continue
@@ -282,12 +282,12 @@ export default function Cart() {
 
           <Link
             to="/products"
-            className="mt-3 block rounded-xl border px-5 py-3.5 text-center text-sm font-semibold text-gray-800 transition hover:bg-gray-50"
+            className="mt-3 block rounded-xl border border-gray-200 px-5 py-3.5 text-center text-sm font-semibold text-gray-800 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
           >
             Continue Shopping
           </Link>
 
-          <div className="mt-5 rounded-xl bg-gray-50 p-3 text-xs leading-5 text-gray-500">
+          <div className="mt-5 rounded-xl border border-gray-100 bg-gray-50 p-3 text-xs leading-5 text-gray-500">
             Final stock availability is verified by the server when your cart and order are processed.
           </div>
         </aside>

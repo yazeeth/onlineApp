@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
     addProduct,
     getAllProducts,
+    getAllProductsForAdminController,
     getSingleProduct,
     editProduct,
     removeProduct,
@@ -82,6 +83,14 @@ router.post(
 );
 
 
+
+// Admin only - get all products including archived products
+router.get(
+    "/admin/all",
+    authMiddleware,
+    requireAdmin,
+    getAllProductsForAdminController
+);
 
 // Public - get products
 /**

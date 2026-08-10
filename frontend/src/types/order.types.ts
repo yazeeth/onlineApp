@@ -1,18 +1,26 @@
 export interface OrderItem {
   id: number;
-  productId: number;
+  productId: number | null;
+  productName: string;
+  productImage?: string | null;
   quantity: number;
   price: number;
   product?: {
     id: number;
     name: string;
     image?: string | null;
-  };
+  } | null;
 }
 
 export interface Order {
   id: number;
   userId: number;
+  user?: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string | null;
+  };
   totalAmount: number;
   status:
     | "PENDING"

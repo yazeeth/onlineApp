@@ -14,7 +14,7 @@ import Categories from "../pages/Categories";
 import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAuthStore } from "../store/authStore";
-import AdminDashboard from "../pages/admin/Dashboard";
+import AdminDashboard from "../pages/admin/Dashboard.tsx";
 import OrdersManagement from "../pages/admin/OrdersManagement";
 import PaymentsManagement from "../pages/admin/PaymentsManagement";
 import ProductsManagement from "../pages/admin/ProductsManagement";

@@ -90,15 +90,15 @@ function Products() {
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <section className="rounded-3xl bg-gray-950 px-6 py-12 text-white sm:px-10">
-          <div className="h-4 w-28 animate-pulse rounded bg-gray-800" />
-          <div className="mt-4 h-10 w-52 animate-pulse rounded bg-gray-800" />
-          <div className="mt-4 h-5 max-w-xl animate-pulse rounded bg-gray-800" />
-          <div className="mt-8 h-12 w-full animate-pulse rounded-xl bg-gray-800" />
+        <section className="rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 px-6 py-12 text-white shadow-lg sm:px-10">
+          <div className="h-4 w-28 animate-pulse rounded bg-white/15" />
+          <div className="mt-4 h-10 w-52 animate-pulse rounded bg-white/15" />
+          <div className="mt-4 h-5 max-w-xl animate-pulse rounded bg-white/15" />
+          <div className="mt-8 h-12 w-full animate-pulse rounded-xl bg-white/15" />
         </section>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div key={item} className="overflow-hidden rounded-2xl border bg-white shadow-sm">
+            <div key={item} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
               <div className="h-56 animate-pulse bg-gray-100" />
               <div className="space-y-3 p-5">
                 <div className="h-3 w-24 animate-pulse rounded bg-gray-100" />
@@ -116,7 +116,7 @@ function Products() {
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+      <div className="rounded-2xl border border-danger-500/20 bg-red-50 p-6 shadow-sm">
         <p className="text-sm font-medium text-red-600">OnlineShop</p>
         <h1 className="mt-1 text-xl font-semibold text-red-700">Failed to load products</h1>
         <p className="mt-2 text-sm text-red-600">Please try again later.</p>
@@ -128,16 +128,16 @@ function Products() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl bg-gray-950 px-6 py-10 text-white shadow-sm sm:px-10 sm:py-12">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-400">OnlineShop</p>
+      <section className="rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 px-6 py-10 text-white shadow-lg sm:px-10 sm:py-12">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-100">OnlineShop</p>
         <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-4xl font-bold tracking-tight">Find your next product</h1>
-            <p className="mt-4 max-w-2xl text-gray-300">
+            <p className="mt-4 max-w-2xl text-indigo-100">
               Search our catalogue, filter by availability, and sort products to quickly find what you need.
             </p>
           </div>
-          <p className="text-sm text-gray-400">{filteredProducts.length} result{filteredProducts.length === 1 ? "" : "s"}</p>
+          <p className="text-sm text-indigo-100">{filteredProducts.length} result{filteredProducts.length === 1 ? "" : "s"}</p>
         </div>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -149,14 +149,14 @@ function Products() {
               onChange={(event) => updateFilterParam("search", event.target.value, "")}
               placeholder="Search products, descriptions, or categories..."
               aria-label="Search products"
-              className="w-full rounded-xl border border-gray-700 bg-gray-900 py-3.5 pl-11 pr-4 text-sm text-white outline-none placeholder:text-gray-500 focus:border-gray-400"
+              className="w-full rounded-xl border border-white/20 bg-white/10 py-3.5 pl-11 pr-4 text-sm text-white outline-none placeholder:text-indigo-100/70 focus:border-white/60"
             />
           </div>
           {searchTerm && (
             <button
               type="button"
               onClick={() => updateFilterParam("search", "", "")}
-              className="rounded-xl border border-gray-700 px-5 py-3.5 text-sm font-semibold text-gray-200 transition hover:bg-gray-800"
+              className="rounded-xl border border-white/25 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               Clear Search
             </button>
@@ -165,21 +165,21 @@ function Products() {
       </section>
 
       {categoryId && (
-        <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-white p-5 shadow-sm sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center">
           <div>
             <p className="text-sm text-gray-500">Category filter</p>
             <p className="mt-1 font-semibold text-gray-900">Showing products from the selected category</p>
           </div>
           <Link
             to="/products"
-            className="inline-flex w-fit rounded-xl border px-4 py-2 text-sm font-semibold transition hover:bg-gray-50"
+            className="inline-flex w-fit rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
           >
             Clear Category
           </Link>
         </div>
       )}
 
-      <section className="rounded-2xl border bg-white p-4 shadow-sm sm:p-5">
+      <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm font-semibold text-gray-900">Browse products</p>
@@ -194,7 +194,7 @@ function Products() {
               <select
                 value={stockFilter}
                 onChange={(event) => updateFilterParam("stock", event.target.value, "all")}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 outline-none focus:border-black"
+                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
               >
                 <option value="all">All products</option>
                 <option value="in-stock">In stock</option>
@@ -207,7 +207,7 @@ function Products() {
               <select
                 value={sortBy}
                 onChange={(event) => updateFilterParam("sort", event.target.value, "featured")}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 outline-none focus:border-black"
+                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
               >
                 <option value="featured">Featured</option>
                 <option value="price-low">Price: Low to High</option>
@@ -224,24 +224,24 @@ function Products() {
           <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-4">
             <span className="text-xs font-medium uppercase tracking-wide text-gray-400">Active filters</span>
             {searchTerm.trim() && (
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+              <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
                 Search: {searchTerm.trim()}
               </span>
             )}
             {stockFilter !== "all" && (
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+              <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
                 {stockFilter === "in-stock" ? "In stock" : "Out of stock"}
               </span>
             )}
             {sortBy !== "featured" && (
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+              <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
                 Sorted
               </span>
             )}
             <button
               type="button"
               onClick={clearFilters}
-              className="ml-auto text-xs font-semibold text-gray-700 underline underline-offset-4 hover:text-black"
+              className="ml-auto text-xs font-semibold text-brand-700 underline underline-offset-4 transition hover:text-brand-900"
             >
               Reset filters
             </button>
@@ -250,7 +250,7 @@ function Products() {
       </section>
 
       {!filteredProducts.length ? (
-        <div className="rounded-2xl border bg-white p-10 text-center shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-sm">
           <div className="text-4xl">⌕</div>
           <h2 className="mt-4 text-xl font-semibold text-gray-900">
             No products found
@@ -261,7 +261,7 @@ function Products() {
           <button
             type="button"
             onClick={clearFilters}
-            className="mt-5 rounded-xl bg-gray-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
+            className="mt-5 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700"
           >
             Reset Filters
           </button>
@@ -276,14 +276,14 @@ function Products() {
             return (
               <article
                 key={product.id}
-                className="group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl"
               >
                 <Link to={`/products/${product.id}`} className="relative block overflow-hidden">
                   {productImageUrl ? (
                     <img
                       src={productImageUrl}
                       alt={product.name}
-                      className="h-56 w-full object-contain bg-gray-50 transition duration-300 group-hover:scale-105"
+                      className="h-56 w-full object-contain bg-gray-50 transition duration-500 group-hover:scale-105"
                       onError={(event) => {
                         console.error("Product image failed to load:", productImageUrl);
                         event.currentTarget.style.display = "none";
@@ -294,7 +294,7 @@ function Products() {
                   ) : null}
                   <div
                     data-image-fallback
-                    className={`${productImageUrl ? "hidden " : ""}flex h-56 w-full items-center justify-center bg-gray-100 text-sm text-gray-500`}
+                    className={`${productImageUrl ? "hidden " : ""}flex h-56 w-full items-center justify-center bg-gray-50 text-sm text-gray-500`}
                   >
                     <div className="flex flex-col items-center gap-2">
                       <span className="text-3xl" aria-hidden="true">🖼️</span>
@@ -303,11 +303,11 @@ function Products() {
                   </div>
 
                   <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-                    <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-gray-700 shadow-sm">
+                    <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-brand-700 shadow-sm ring-1 ring-brand-100">
                       {product.category?.name ?? "Uncategorized"}
                     </span>
                     {isOutOfStock && (
-                      <span className="rounded-full bg-red-600 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                      <span className="rounded-full bg-danger-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
                         Out of stock
                       </span>
                     )}
@@ -315,10 +315,10 @@ function Products() {
                 </Link>
 
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <p className="text-xs font-bold uppercase tracking-wider text-brand-600">
                     {product.category?.name ?? "Uncategorized"}
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-gray-900">{product.name}</h2>
+                  <h2 className="mt-2 text-xl font-bold tracking-tight text-gray-950">{product.name}</h2>
                   <p className="mt-2 line-clamp-2 text-sm leading-6 text-gray-600">
                     {product.description ?? "No description available."}
                   </p>
@@ -326,11 +326,11 @@ function Products() {
                   <div className="mt-auto pt-5">
                     <div className="flex items-end justify-between gap-4">
                       <div>
-                        <p className="text-xl font-bold text-gray-950">
+                        <p className="text-2xl font-black tracking-tight text-brand-700">
                           ${product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                         {isLowStock ? (
-                          <p className="mt-1 text-xs font-semibold text-amber-600">Only {product.stock} left</p>
+                          <p className="mt-1 text-xs font-semibold text-warning-500">Only {product.stock} left</p>
                         ) : (
                           <p className="mt-1 text-xs text-gray-500">
                             {product.stock} in stock
@@ -343,8 +343,8 @@ function Products() {
                       to={`/products/${product.id}`}
                       className={`mt-5 block rounded-xl px-4 py-3 text-center text-sm font-semibold transition ${
                         isOutOfStock
-                          ? "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                          : "bg-gray-950 text-white hover:bg-gray-700"
+                          ? "border border-gray-300 bg-white text-gray-700 hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
+                          : "bg-brand-600 text-white shadow-sm hover:bg-brand-700"
                       }`}
                     >
                       {isOutOfStock ? "View Details" : "View Product"}

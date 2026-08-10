@@ -38,12 +38,12 @@ export default function ProductDetails() {
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="h-6 w-32 animate-pulse rounded bg-gray-100" />
         <div className="grid gap-8 md:grid-cols-2">
-          <div className="h-[28rem] animate-pulse rounded-3xl bg-gray-100" />
+          <div className="h-[28rem] animate-pulse rounded-3xl border border-gray-200 bg-gray-100" />
           <div className="space-y-5">
-            <div className="h-5 w-32 animate-pulse rounded bg-gray-100" />
-            <div className="h-10 w-3/4 animate-pulse rounded bg-gray-100" />
+            <div className="h-5 w-32 animate-pulse rounded border border-gray-200 bg-gray-100" />
+            <div className="h-10 w-3/4 animate-pulse rounded border border-gray-200 bg-gray-100" />
             <div className="h-24 animate-pulse rounded bg-gray-100" />
-            <div className="h-8 w-32 animate-pulse rounded bg-gray-100" />
+            <div className="h-8 w-32 animate-pulse rounded border border-gray-200 bg-gray-100" />
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="mx-auto max-w-2xl rounded-3xl border bg-white p-10 text-center shadow-sm">
+      <div className="mx-auto max-w-2xl rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-sm">
         <div className="text-5xl">🛍️</div>
         <h1 className="mt-5 text-2xl font-bold">Product not found</h1>
         <p className="mt-2 text-gray-500">
@@ -60,7 +60,7 @@ export default function ProductDetails() {
         </p>
         <Link
           to="/products"
-          className="mt-6 inline-block rounded-xl bg-gray-950 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700"
+          className="mt-6 inline-block rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
         >
           Back to Products
         </Link>
@@ -103,42 +103,42 @@ export default function ProductDetails() {
     <div className="mx-auto max-w-6xl space-y-6">
       <Link
         to="/products"
-        className="inline-flex text-sm font-semibold text-gray-600 hover:text-gray-950"
+        className="inline-flex items-center text-sm font-semibold text-gray-600 transition hover:text-brand-700"
       >
         ← Back to Products
       </Link>
 
-      <div className="overflow-hidden rounded-3xl border bg-white shadow-sm">
+      <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg">
         <div className="grid md:grid-cols-2">
-          <div className="bg-gray-50 p-6 sm:p-10">
+          <div className="bg-gradient-to-br from-gray-50 to-brand-50/40 p-6 sm:p-10">
             {productImage ? (
               <img
                 src={productImageUrl ?? undefined}
                 alt={product.name}
-                className="h-[28rem] w-full rounded-2xl object-contain bg-gray-50"
+                className="h-[28rem] w-full rounded-2xl bg-white object-contain p-4 shadow-sm transition duration-500 hover:scale-[1.01]"
               />
             ) : (
-              <div className="flex h-[28rem] w-full items-center justify-center rounded-2xl bg-gray-100 text-gray-500">
+              <div className="flex h-[28rem] w-full items-center justify-center rounded-2xl border border-gray-200 bg-white text-gray-500">
                 No image available
               </div>
             )}
           </div>
 
           <div className="p-6 sm:p-10">
-            <p className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+            <p className="text-sm font-bold uppercase tracking-wider text-brand-600">
               {product.category?.name ?? "Uncategorized"}
             </p>
 
-            <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="mt-3 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
               {product.name}
             </h1>
 
-            <p className="mt-5 text-3xl font-bold">
+            <p className="mt-5 text-3xl font-black tracking-tight text-brand-700">
               ${product.price.toLocaleString()}
             </p>
 
-            <div className="mt-5 rounded-xl bg-gray-50 p-4">
-              <p className="text-sm font-semibold">
+            <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="text-sm font-bold">
                 {product.stock > 0 ? "In stock" : "Out of stock"}
               </p>
               <p className="mt-1 text-sm text-gray-600">
@@ -148,8 +148,8 @@ export default function ProductDetails() {
               </p>
             </div>
 
-            <div className="mt-6 border-t pt-6">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+            <div className="mt-6 border-t border-gray-200 pt-6">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-brand-600">
                 Description
               </h2>
               <p className="mt-3 leading-7 text-gray-600">
@@ -158,8 +158,8 @@ export default function ProductDetails() {
             </div>
 
             {!isAdmin && (
-              <div className="mt-8 border-t pt-6">
-                <label htmlFor="quantity" className="text-sm font-semibold">
+              <div className="mt-8 border-t border-gray-200 pt-6">
+                <label htmlFor="quantity" className="text-sm font-bold">
                   Quantity
                 </label>
 
@@ -168,7 +168,7 @@ export default function ProductDetails() {
                     type="button"
                     onClick={() => handleQuantityChange(quantity - 1)}
                     disabled={product.stock <= 0 || quantity <= 1}
-                    className="h-11 w-11 rounded-xl border font-semibold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="h-11 w-11 rounded-xl border border-gray-200 font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     −
                   </button>
@@ -183,14 +183,14 @@ export default function ProductDetails() {
                     onChange={(event) =>
                       handleQuantityChange(Number(event.target.value))
                     }
-                    className="h-11 w-20 rounded-xl border text-center outline-none focus:border-gray-950 focus:ring-2 focus:ring-gray-200"
+                    className="h-11 w-20 rounded-xl border border-gray-200 text-center outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
                   />
 
                   <button
                     type="button"
                     onClick={() => handleQuantityChange(quantity + 1)}
                     disabled={product.stock <= 0 || quantity >= product.stock}
-                    className="h-11 w-11 rounded-xl border font-semibold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="h-11 w-11 rounded-xl border border-gray-200 font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     +
                   </button>
@@ -200,7 +200,7 @@ export default function ProductDetails() {
                   type="button"
                   onClick={handleAddToCart}
                   disabled={product.stock <= 0 || addItem.isPending}
-                  className="mt-5 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-5 w-full rounded-xl bg-brand-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {product.stock <= 0
                     ? "Out of Stock"
@@ -212,7 +212,7 @@ export default function ProductDetails() {
                 {user ? (
                   <Link
                     to="/cart"
-                    className="mt-3 block w-full rounded-xl border px-5 py-3.5 text-center text-sm font-semibold hover:bg-gray-50"
+                    className="mt-3 block w-full rounded-xl border border-gray-200 px-5 py-3.5 text-center text-sm font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
                   >
                     View Cart
                   </Link>
@@ -223,7 +223,7 @@ export default function ProductDetails() {
                       toast.info("Please log in to view your cart.");
                       navigate("/login");
                     }}
-                    className="mt-3 block w-full rounded-xl border px-5 py-3.5 text-center text-sm font-semibold hover:bg-gray-50"
+                    className="mt-3 block w-full rounded-xl border border-gray-200 px-5 py-3.5 text-center text-sm font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
                   >
                     View Cart
                   </button>
@@ -231,8 +231,8 @@ export default function ProductDetails() {
               </div>
             )}
             {isAdmin && (
-              <div className="mt-8 border-t pt-6">
-                <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
+              <div className="mt-8 border-t border-gray-200 pt-6">
+                <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 shadow-sm">
                   <p className="text-sm font-semibold text-blue-900">
                     Admin view
                   </p>
@@ -242,7 +242,7 @@ export default function ProductDetails() {
                   </p>
                   <Link
                     to="/admin"
-                    className="mt-4 inline-flex rounded-xl bg-gray-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-700"
+                    className="mt-4 inline-flex rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
                   >
                     Open Admin Portal
                   </Link>

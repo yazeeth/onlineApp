@@ -11,6 +11,11 @@ export const productApi = {
     return response.data.products;
   },
 
+  getAllProductsForAdmin: async (): Promise<Product[]> => {
+    const response = await api.get("/products/admin/all");
+    return response.data.products;
+  },
+
   getProduct: async (id: number): Promise<Product> => {
     const response = await api.get(`/products/${id}`);
     return response.data;

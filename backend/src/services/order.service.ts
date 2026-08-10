@@ -220,7 +220,8 @@ export const getAllOrders = async () => {
                 select: {
                     id: true,
                     name: true,
-                    email: true
+                    email: true,
+                    phone: true
                 }
             },
             address: true,

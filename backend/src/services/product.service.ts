@@ -118,6 +118,41 @@ export const getProducts = async (
     };
 };
 
+export const getAllProductsForAdmin = async (
+    search?: string,
+    categoryId?: number
+) => {
+    const products = await prisma.product.findMany({
+        where: {
+            AND: [
+                search
+                    ? {
+                        name: {
+                            contains: search,
+                            mode: "insensitive"
+                        }
+                    }
+                    : {},
+                categoryId
+                    ? {
+                        category: {
+                            id: categoryId
+                        }
+                    }
+                    : {}
+            ]
+        },
+        include: {
+            category: true
+        },
+        orderBy: {
+            id: "desc"
+        }
+    });
+
+    return products;
+};
+
 
 
 
@@ -254,7 +289,7 @@ export const archiveProduct = async (
             id
         },
         data: {
-            active: false as boolean
+            active: false
         }
     });
 
@@ -281,7 +316,7 @@ export const restoreProduct = async (
             id
         },
         data: {
-            active: true as boolean
+            active: true
         }
     });
 

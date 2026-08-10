@@ -80,7 +80,7 @@ export default function Orders() {
 
         <div className="space-y-4">
           {[1, 2, 3].map((item) => (
-            <div key={item} className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div key={item} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-3">
                   <div className="h-6 w-32 animate-pulse rounded bg-gray-100" />
@@ -99,10 +99,10 @@ export default function Orders() {
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
-        <p className="text-sm font-semibold uppercase tracking-wider text-red-500">My Orders</p>
-        <h1 className="mt-1 text-xl font-bold text-red-800">Failed to load orders</h1>
-        <p className="mt-2 text-sm text-red-700">
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-wider text-danger-500">My Orders</p>
+        <h1 className="mt-1 text-xl font-bold text-danger-500">Failed to load orders</h1>
+        <p className="mt-2 text-sm text-danger-500">
           We couldn't retrieve your orders. Please refresh the page and try again.
         </p>
       </div>
@@ -111,12 +111,12 @@ export default function Orders() {
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl rounded-3xl border bg-white p-10 text-center shadow-sm sm:p-14">
+      <div className="mx-auto max-w-2xl rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-sm sm:p-14">
         <div className="text-6xl">📦</div>
-        <p className="mt-5 text-sm font-semibold uppercase tracking-wider text-gray-400">
+        <p className="mt-5 text-sm font-bold uppercase tracking-wider text-brand-600">
           My Orders
         </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
+        <h1 className="mt-2 text-3xl font-black tracking-tight text-gray-950">
           No orders yet
         </h1>
         <p className="mx-auto mt-3 max-w-md text-gray-500">
@@ -124,7 +124,7 @@ export default function Orders() {
         </p>
         <Link
           to="/products"
-          className="mt-7 inline-block rounded-xl bg-gray-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
+          className="mt-7 inline-block rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
         >
           Start Shopping
         </Link>
@@ -153,20 +153,20 @@ export default function Orders() {
     <div className="space-y-8">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-brand-600">
             Account
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-950">My Orders</h1>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-gray-950">My Orders</h1>
           <p className="mt-2 text-gray-600">
             Track your purchases, payment status, and order details.
           </p>
         </div>
-        <div className="rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700">
+        <div className="rounded-full bg-brand-50 px-4 py-2 text-sm font-bold text-brand-700 ring-1 ring-brand-100">
           {orders.length} total order{orders.length === 1 ? "" : "s"}
         </div>
       </header>
 
-      <div className="rounded-2xl border bg-white p-2 shadow-sm">
+      <div className="rounded-2xl border border-gray-200 bg-white p-2 shadow-sm">
         <div className="grid grid-cols-3 gap-1" role="tablist" aria-label="Order history filters">
           <button
             type="button"
@@ -175,8 +175,8 @@ export default function Orders() {
             onClick={() => setActiveTab("recent")}
             className={`rounded-xl px-3 py-3 text-sm font-semibold transition sm:px-4 ${
               activeTab === "recent"
-                ? "bg-gray-950 text-white"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-brand-600 text-white shadow-sm"
+                : "text-gray-600 hover:bg-brand-50 hover:text-brand-700"
             }`}
           >
             Recent ({Math.min(sortedOrders.length, 5)})
@@ -188,8 +188,8 @@ export default function Orders() {
             onClick={() => setActiveTab("delivered")}
             className={`rounded-xl px-3 py-3 text-sm font-semibold transition sm:px-4 ${
               activeTab === "delivered"
-                ? "bg-gray-950 text-white"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-brand-600 text-white shadow-sm"
+                : "text-gray-600 hover:bg-brand-50 hover:text-brand-700"
             }`}
           >
             Delivered ({deliveredOrders.length})
@@ -201,8 +201,8 @@ export default function Orders() {
             onClick={() => setActiveTab("all")}
             className={`rounded-xl px-3 py-3 text-sm font-semibold transition sm:px-4 ${
               activeTab === "all"
-                ? "bg-gray-950 text-white"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-brand-600 text-white shadow-sm"
+                : "text-gray-600 hover:bg-brand-50 hover:text-brand-700"
             }`}
           >
             All ({sortedOrders.length})
@@ -212,7 +212,7 @@ export default function Orders() {
 
       {activeTab === "recent" && sortedOrders.length > 5 && (
         <p className="text-sm text-gray-500">
-          Showing your 5 most recent orders. Select <span className="font-semibold">All</span> to view your complete order history.
+          Showing your 5 most recent orders. Select <span className="font-bold text-brand-700">All</span> to view your complete order history.
         </p>
       )}
 
@@ -226,7 +226,7 @@ export default function Orders() {
           return (
             <article
               key={order.id}
-              className="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md"
+              className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-lg"
             >
               <div className="p-5 sm:p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -245,27 +245,27 @@ export default function Orders() {
                   </div>
 
                   <div className="sm:text-right">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-600">
                       Order Total
                     </p>
-                    <p className="mt-1 text-2xl font-bold text-gray-950">
+                    <p className="mt-1 text-2xl font-black tracking-tight text-brand-700">
                       {formatPrice(Number(order.totalAmount))}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-xl bg-gray-50 p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <div className="rounded-xl border border-gray-100 bg-gray-50 p-4 transition hover:border-brand-100 hover:bg-brand-50/40">
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-600">
                       Payment Method
                     </p>
-                    <p className="mt-2 font-semibold text-gray-900">
+                    <p className="mt-2 font-bold text-gray-950">
                       {getPaymentMethodLabel(order.payment?.method)}
                     </p>
                   </div>
 
-                  <div className="rounded-xl bg-gray-50 p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <div className="rounded-xl border border-gray-100 bg-gray-50 p-4 transition hover:border-brand-100 hover:bg-brand-50/40">
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-600">
                       Payment Status
                     </p>
                     <p className={`mt-2 font-semibold ${getPaymentStatusClasses(paymentStatus)}`}>
@@ -277,7 +277,7 @@ export default function Orders() {
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
                     to={`/orders/${order.id}`}
-                    className="inline-flex items-center justify-center rounded-xl bg-gray-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
+                    className="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
                   >
                     View Order Details
                   </Link>
@@ -298,7 +298,7 @@ export default function Orders() {
                           onSettled: () => setCancellingOrderId(null),
                         });
                       }}
-                      className="inline-flex items-center justify-center rounded-xl border border-red-200 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="inline-flex items-center justify-center rounded-xl border border-red-200 px-5 py-3 text-sm font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {isCancelling ? "Cancelling..." : "Cancel Order"}
                     </button>
@@ -309,9 +309,9 @@ export default function Orders() {
           );
         })}
         {activeTab === "delivered" && deliveredOrders.length === 0 && (
-          <div className="rounded-2xl border border-dashed bg-white p-10 text-center">
+          <div className="rounded-2xl border border-dashed border-brand-200 bg-brand-50/30 p-10 text-center">
             <div className="text-4xl">📦</div>
-            <h2 className="mt-3 text-lg font-bold text-gray-900">No delivered orders yet</h2>
+            <h2 className="mt-3 text-lg font-bold text-gray-950">No delivered orders yet</h2>
             <p className="mt-1 text-sm text-gray-500">
               Completed deliveries will appear here as your order history grows.
             </p>

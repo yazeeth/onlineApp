@@ -36,15 +36,15 @@ export default function Home() {
 
   return (
     <div className="space-y-16">
-      <section className="overflow-hidden rounded-3xl bg-gray-950 px-6 py-16 text-white sm:px-10 lg:px-16 lg:py-24">
+      <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 px-6 py-16 text-white shadow-lg sm:px-10 lg:px-16 lg:py-24">
         <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-100">
             Welcome to OnlineShop
           </p>
           <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Everything you need, in one place.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-300 sm:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-indigo-100 sm:text-lg">
             {isAdmin
               ? "Browse the product catalogue and manage your store from the admin portal."
               : "Discover products, manage your cart, complete checkout, and keep track of your orders from one simple shopping experience."}
@@ -52,20 +52,20 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               to="/products"
-              className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-gray-950 hover:bg-gray-200"
+              className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50"
             >
               {isAdmin ? "View Products" : "Shop Products"}
             </Link>
             <Link
               to="/categories"
-              className="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold hover:bg-white/10"
+              className="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
             >
               Browse Categories
             </Link>
             {isAdmin && (
               <Link
                 to="/admin"
-                className="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold hover:bg-white/10"
+                className="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
               >
                 Admin Portal
               </Link>
@@ -75,7 +75,7 @@ export default function Home() {
       </section>
 
       {user ? (
-        <section className="rounded-2xl border bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
             <div>
               <p className="text-sm font-medium text-gray-500">
@@ -94,21 +94,21 @@ export default function Home() {
               {isAdmin ? (
                 <Link
                   to="/admin"
-                  className="rounded-xl bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700"
+                  className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
                 >
                   Admin Portal
                 </Link>
               ) : (
                 <Link
                   to="/orders"
-                  className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+                  className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
                 >
                   My Orders
                 </Link>
               )}
               <Link
                 to="/profile"
-                className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+                className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
               >
                 My Profile
               </Link>
@@ -116,7 +116,7 @@ export default function Home() {
           </div>
         </section>
       ) : (
-        <section className="rounded-2xl border bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
             <div>
               <p className="text-sm font-medium text-gray-500">New to OnlineShop?</p>
@@ -128,13 +128,13 @@ export default function Home() {
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/login"
-                className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+                className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="rounded-xl bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700"
+                className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
               >
                 Create Account
               </Link>
@@ -182,11 +182,8 @@ export default function Home() {
               <Link
                 key={category.id}
                 to={`/products?categoryId=${category.id}`}
-                className="group rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 text-xl transition group-hover:bg-gray-950 group-hover:text-white">
-                  🛍️
-                </div>
                 <h3 className="mt-4 font-semibold">{category.name}</h3>
                 <p className="mt-1 text-sm text-gray-500">Browse products</p>
               </Link>
@@ -239,7 +236,7 @@ export default function Home() {
             {typedProducts.slice(0, 6).map((product) => (
               <article
                 key={product.id}
-                className="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg"
               >
                 {getProductImageUrl(product.imageUrl) ? (
                   <img
@@ -248,7 +245,7 @@ export default function Home() {
                     className="h-56 w-full object-contain bg-gray-50"
                   />
                 ) : (
-                  <div className="flex h-56 w-full items-center justify-center bg-gray-100 text-sm text-gray-500">
+                  <div className="flex h-56 w-full items-center justify-center bg-gray-50 text-sm text-gray-500">
                     No image available
                   </div>
                 )}
@@ -271,7 +268,7 @@ export default function Home() {
 
                   <Link
                     to={`/products/${product.id}`}
-                    className="mt-5 block rounded-xl bg-gray-950 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-gray-700"
+                    className="mt-5 block rounded-xl bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-700"
                   >
                     View Product
                   </Link>
@@ -283,8 +280,8 @@ export default function Home() {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Link to="/products" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-          <div className="text-2xl">🛍️</div>
+        <Link to="/products" className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+          <div className="text-2xl transition-transform duration-300 group-hover:scale-110">🛍️</div>
           <h3 className="mt-4 font-semibold">Products</h3>
           <p className="mt-2 text-sm leading-6 text-gray-600">
             {isAdmin ? "Browse the complete product catalogue." : "Explore the complete product catalogue."}
@@ -292,51 +289,53 @@ export default function Home() {
         </Link>
 
         {isAdmin ? (
-          <Link to="/categories" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-            <div className="text-2xl">🏷️</div>
+          <Link to="/categories" className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+            <div className="text-2xl transition-transform duration-300 group-hover:scale-110">🏷️</div>
             <h3 className="mt-4 font-semibold">Categories</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Browse products by category.
             </p>
           </Link>
-        ) : (
-          <Link to="/cart" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-            <div className="text-2xl">🛒</div>
+        ) : user ? (
+          <Link to="/cart" className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+            <div className="text-2xl transition-transform duration-300 group-hover:scale-110">🛒</div>
             <h3 className="mt-4 font-semibold">Shopping Cart</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Review your selected products before checkout.
             </p>
           </Link>
-        )}
+        ) : null}
 
         {isAdmin ? (
-          <Link to="/admin" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-            <div className="text-2xl">⚙️</div>
+          <Link to="/admin" className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+            <div className="text-2xl transition-transform duration-300 group-hover:scale-110">⚙️</div>
             <h3 className="mt-4 font-semibold">Admin Portal</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Manage products, orders, users, and payments.
             </p>
           </Link>
-        ) : (
-          <Link to="/orders" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-            <div className="text-2xl">📦</div>
+        ) : user ? (
+          <Link to="/orders" className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+            <div className="text-2xl transition-transform duration-300 group-hover:scale-110">📦</div>
             <h3 className="mt-4 font-semibold">My Orders</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Track your order history and view order details.
             </p>
           </Link>
-        )}
+        ) : null}
 
-        <Link to="/profile" className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md">
-          <div className="text-2xl">👤</div>
-          <h3 className="mt-4 font-semibold">My Profile</h3>
-          <p className="mt-2 text-sm leading-6 text-gray-600">
-            Manage your account information and preferences.
-          </p>
-        </Link>
+        {user && (
+          <Link to="/profile" className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+            <div className="text-2xl transition-transform duration-300 group-hover:scale-110">👤</div>
+            <h3 className="mt-4 font-semibold">My Profile</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Manage your account information and preferences.
+            </p>
+          </Link>
+        )}
       </section>
 
-      <section className="rounded-2xl border bg-gray-100 p-8 text-center sm:p-12">
+      <section className="rounded-2xl border border-brand-100 bg-brand-50 p-8 text-center sm:p-12">
         <h2 className="text-3xl font-bold">
           {isAdmin ? "Ready to manage your store?" : "Ready to start shopping?"}
         </h2>
@@ -347,7 +346,7 @@ export default function Home() {
         </p>
         <Link
           to={isAdmin ? "/admin" : "/products"}
-          className="mt-6 inline-block rounded-xl bg-gray-950 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700"
+          className="mt-6 inline-block rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
         >
           {isAdmin ? "Open Admin Portal" : "Start Shopping"}
         </Link>
