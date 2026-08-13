@@ -184,26 +184,26 @@ export default function Dashboard() {
       .slice(0, 5);
   }, [data.products]);
 
-  return (
-    <main className="min-h-full bg-gray-50 px-4 py-6 sm:px-6 lg:px-8">
+return (
+    <main className="min-h-full bg-[var(--background)] px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-7xl space-y-8">
-        <header className="rounded-2xl border border-gray-200 bg-white px-6 py-7 shadow-sm sm:px-8">
+        <header className="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] px-6 py-7 shadow-xl shadow-black/20 sm:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-400">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-accent)]">
                 Administration
               </p>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
+              <h1 className="mt-2 text-3xl font-black tracking-tight text-[var(--text-primary)] sm:text-4xl">
                 Store Dashboard
               </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--text-secondary)] font-medium">
                 Monitor your store, manage orders and products, and keep track of customers and payments.
               </p>
             </div>
 
             <Link
               to="/"
-              className="inline-flex w-fit items-center rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-bold text-gray-700 transition hover:bg-gray-100"
+              className="inline-flex w-fit items-center rounded-xl border border-[var(--border-strong)] bg-[var(--surface-secondary)] px-4 py-2.5 text-sm font-bold text-[var(--text-accent)] transition hover:border-[var(--brand-accent)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
             >
               Back to Store
             </Link>
@@ -211,15 +211,15 @@ export default function Dashboard() {
         </header>
 
         {error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+          <div className="rounded-xl border border-red-900/70 bg-red-950/50 px-5 py-4 text-sm font-medium text-red-300">
             {error}
           </div>
         )}
 
         <section>
           <div className="mb-4">
-            <h2 className="text-xl font-black text-gray-950">Overview</h2>
-            <p className="mt-1 text-sm text-gray-500">Your store at a glance.</p>
+            <h2 className="text-xl font-black text-[var(--text-primary)] tracking-tight">Overview</h2>
+            <p className="mt-1 text-sm text-[var(--text-secondary)] font-medium">Your store at a glance.</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -252,41 +252,41 @@ export default function Dashboard() {
               <Link
                 key={stat.label}
                 to={stat.href}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md"
+                className="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-secondary)] p-6 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-[var(--brand-accent)] hover:bg-[var(--surface)] hover:shadow-xl"
               >
-                <p className="text-sm font-semibold text-gray-500">{stat.label}</p>
-                <p className="mt-3 truncate text-3xl font-black tracking-tight text-gray-950">
+                <p className="text-sm font-semibold text-[var(--text-accent)]">{stat.label}</p>
+                <p className="mt-3 truncate text-3xl font-black tracking-tight text-[var(--text-primary)] drop-shadow-sm">
                   {loading ? "—" : stat.value}
                 </p>
-                <p className="mt-2 text-xs text-gray-400">{stat.description}</p>
+                <p className="mt-2 text-xs font-medium text-[var(--text-secondary)]">{stat.description}</p>
               </Link>
             ))}
           </div>
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div className="flex flex-col gap-3 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] shadow-lg shadow-black/15">
+            <div className="flex flex-col gap-3 border-b border-[var(--border)] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-lg font-black text-gray-950">Recent Orders</h2>
-                <p className="mt-1 text-sm text-gray-500">Latest activity from your store.</p>
+                <h2 className="text-lg font-black text-[var(--text-primary)] tracking-tight">Recent Orders</h2>
+                <p className="mt-1 text-sm text-[var(--text-secondary)] font-medium">Latest activity from your store.</p>
               </div>
               <Link
                 to="/admin/orders"
-                className="text-sm font-bold text-gray-700 hover:text-gray-950"
+                className="text-sm font-bold text-[var(--brand-accent)] hover:text-[var(--brand-accent)]"
               >
                 Manage Orders →
               </Link>
             </div>
 
             {loading ? (
-              <div className="px-6 py-10 text-center text-sm text-gray-500">Loading orders...</div>
+              <div className="px-6 py-10 text-center text-sm text-[var(--text-secondary)] font-medium">Loading orders...</div>
             ) : recentOrders.length === 0 ? (
-              <div className="px-6 py-10 text-center text-sm text-gray-500">
+              <div className="px-6 py-10 text-center text-sm text-[var(--text-secondary)] font-medium">
                 No orders have been placed yet.
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-[var(--border)]">
                 {recentOrders.map((order) => {
                   const orderWithMeta = order as Order & {
                     id?: string | number;
@@ -300,19 +300,19 @@ export default function Dashboard() {
                     <Link
                       key={String(orderWithMeta.id)}
                       to="/admin/orders"
-                      className="block px-6 py-5 transition hover:bg-gray-50"
+                      className="block px-6 py-5 transition hover:bg-[var(--surface-secondary)]/70"
                     >
                       <div className="grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center md:gap-6">
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-bold text-gray-900">
+                          <p className="truncate text-sm font-bold text-[var(--text-primary)]">
                             Order #{String(orderWithMeta.id).slice(-8)}
                           </p>
-                          <p className="mt-1 truncate text-xs text-gray-500">
+                          <p className="mt-1 truncate text-xs text-[var(--text-secondary)] font-medium">
                             {orderWithMeta.user?.name || orderWithMeta.user?.email || "Customer"}
                           </p>
                         </div>
 
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-[var(--text-secondary)] font-medium">
                           {formatDate(orderWithMeta.createdAt)}
                         </p>
 
@@ -322,7 +322,7 @@ export default function Dashboard() {
                           >
                             {statusLabels[status] ?? status}
                           </span>
-                          <span className="text-sm font-black text-gray-950">
+                          <span className="text-sm font-black text-[var(--text-primary)]">
                             {formatCurrency(getOrderTotal(order))}
                           </span>
                         </div>
@@ -334,13 +334,13 @@ export default function Dashboard() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-black text-gray-950">Order Status</h2>
-            <p className="mt-1 text-sm text-gray-500">Current order distribution.</p>
+          <div className="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] p-6 shadow-lg shadow-black/15">
+            <h2 className="text-lg font-black text-[var(--text-primary)] tracking-tight">Order Status</h2>
+            <p className="mt-1 text-sm text-[var(--text-secondary)] font-medium">Current order distribution.</p>
 
             <div className="mt-6 space-y-5">
               {Object.entries(orderStatusCounts).length === 0 ? (
-                <p className="py-6 text-center text-sm text-gray-500">No order data available.</p>
+                <p className="py-6 text-center text-sm text-[var(--text-secondary)] font-medium">No order data available.</p>
               ) : (
                 Object.entries(orderStatusCounts)
                   .sort(([, a], [, b]) => b - a)
@@ -352,16 +352,16 @@ export default function Dashboard() {
                     return (
                       <div key={status}>
                         <div className="mb-2 flex items-center justify-between gap-3">
-                          <span className="text-sm font-bold text-gray-700">
+                          <span className="text-sm font-bold text-[var(--text-primary)]">
                             {statusLabels[status] ?? status}
                           </span>
-                          <span className="text-xs font-semibold text-gray-400">
+                          <span className="text-xs font-semibold text-[var(--text-secondary)]">
                             {count} · {percentage}%
                           </span>
                         </div>
-                        <div className="h-2 rounded-full bg-gray-100">
+                        <div className="h-2 rounded-full bg-[var(--surface-secondary)]">
                           <div
-                            className="h-2 rounded-full bg-gray-900 transition-all"
+                            className="h-2 rounded-full bg-[var(--brand-accent)] transition-all"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
@@ -374,38 +374,38 @@ export default function Dashboard() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+          <div className="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] shadow-lg shadow-black/15">
+            <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-5">
               <div>
-                <h2 className="text-lg font-black text-gray-950">Inventory</h2>
-                <p className="mt-1 text-sm text-gray-500">Products that need attention.</p>
+                <h2 className="text-lg font-black text-[var(--text-primary)] tracking-tight">Inventory</h2>
+                <p className="mt-1 text-sm text-[var(--text-secondary)] font-medium">Products that need attention.</p>
               </div>
-              <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-black text-red-700">
+              <span className="rounded-full border border-red-800 bg-red-950/70 px-3 py-1 text-xs font-black text-red-200">
                 {loading ? "—" : `${stats.lowStock} low`}
               </span>
             </div>
 
             {loading ? (
-              <div className="px-6 py-8 text-sm text-gray-500">Loading inventory...</div>
+              <div className="px-6 py-8 text-sm text-[var(--text-secondary)] font-medium">Loading inventory...</div>
             ) : lowStockProducts.length === 0 ? (
-              <div className="px-6 py-8 text-sm font-semibold text-emerald-700">
+              <div className="px-6 py-8 text-sm font-semibold text-emerald-400">
                 ✓ All products have healthy stock levels.
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-[var(--border)]">
                 {lowStockProducts.map(({ product, stock }) => (
                   <Link
                     key={String((product as Product & { id?: string | number }).id)}
                     to="/admin/products"
-                    className="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-gray-50"
+                    className="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-[var(--surface-secondary)]/70"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-gray-800">
+                      <p className="truncate text-sm font-bold text-[var(--text-primary)]">
                         {String((product as Product & { name?: string }).name ?? "Product")}
                       </p>
-                      <p className="mt-1 text-xs text-gray-400">Needs restocking</p>
+                      <p className="mt-1 text-xs text-[var(--text-secondary)] font-medium">Needs restocking</p>
                     </div>
-                    <span className="shrink-0 rounded-full bg-red-50 px-3 py-1 text-xs font-black text-red-700">
+                    <span className="shrink-0 rounded-full border border-red-800 bg-red-950/70 px-3 py-1 text-xs font-black text-red-200">
                       {stock} left
                     </span>
                   </Link>
@@ -414,10 +414,10 @@ export default function Dashboard() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div className="border-b border-gray-100 px-6 py-5">
-              <h2 className="text-lg font-black text-gray-950">Quick Actions</h2>
-              <p className="mt-1 text-sm text-gray-500">Jump directly to common tasks.</p>
+          <div className="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] shadow-lg shadow-black/15">
+            <div className="border-b border-[var(--border)] px-6 py-5">
+              <h2 className="text-lg font-black text-[var(--text-primary)] tracking-tight">Quick Actions</h2>
+              <p className="mt-1 text-sm text-[var(--text-secondary)] font-medium">Jump directly to common tasks.</p>
             </div>
 
             <div className="grid gap-3 p-6 sm:grid-cols-2">
@@ -430,13 +430,13 @@ export default function Dashboard() {
                 <Link
                   key={href}
                   to={href}
-                  className="rounded-xl border border-gray-200 bg-gray-50 p-4 transition hover:border-gray-300 hover:bg-white hover:shadow-sm"
+                  className="rounded-xl border border-[var(--border-strong)] bg-[var(--surface-secondary)] p-4 transition hover:border-[var(--brand-accent)] hover:bg-[var(--surface)] hover:shadow-md"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-sm font-bold text-gray-900">{label}</span>
-                    <span className="text-gray-400">→</span>
+                    <span className="text-sm font-bold text-[var(--text-primary)]">{label}</span>
+                    <span className="text-[var(--brand-accent)]">→</span>
                   </div>
-                  <p className="mt-2 text-xs leading-5 text-gray-500">{description}</p>
+                  <p className="mt-2 text-xs leading-5 text-[var(--text-secondary)] font-medium">{description}</p>
                 </Link>
               ))}
             </div>

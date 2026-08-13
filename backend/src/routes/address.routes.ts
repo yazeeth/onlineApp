@@ -1,5 +1,3 @@
-
-
 import { Router } from "express";
 import { authMiddleware } from "../middleware/auth.middleware";
 import {
@@ -7,6 +5,10 @@ import {
   editAddress,
   getAddresses,
   removeAddress,
+  getAdminCustomerAddresses,
+  addAdminCustomerAddress,
+  editAdminCustomerAddress,
+  removeAdminCustomerAddress,
 } from "../controllers/address.controller";
 
 const router = Router();
@@ -157,5 +159,25 @@ router.put("/:id", authMiddleware, editAddress);
  *         description: Failed to delete address
  */
 router.delete("/:id", authMiddleware, removeAddress);
+
+/**
+ * Admin: get all addresses belonging to a customer.
+ */
+router.get("/admin/users/:userId", authMiddleware, getAdminCustomerAddresses);
+
+/**
+ * Admin: create an address for a customer.
+ */
+router.post("/admin/users/:userId", authMiddleware, addAdminCustomerAddress);
+
+/**
+ * Admin: update a customer's address.
+ */
+router.put("/admin/users/:userId/:id", authMiddleware, editAdminCustomerAddress);
+
+/**
+ * Admin: delete a customer's address.
+ */
+router.delete("/admin/users/:userId/:id", authMiddleware, removeAdminCustomerAddress);
 
 export default router;

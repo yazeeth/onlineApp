@@ -2,6 +2,169 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useOrders } from "../hooks/useOrders";
 
+const printInvoice = (order: any) => {
+  const invoiceWindow = window.open("", "_blank", "width=900,height=700");
+
+  if (!invoiceWindow) {
+    return;
+  }
+
+  const items = order.items ?? [];
+  const paymentMethod =
+    order.payment?.method === "BANK_TRANSFER"
+      ? "Bank Transfer"
+      : order.payment?.method === "COD"
+        ? "Cash on Delivery"
+        : "Not available";
+  const paymentStatus = order.payment?.status ?? "PENDING";
+
+  const rows = items
+    .map(
+      (item: any) => `
+        <tr>
+          <td>${item.product?.name ?? "Product"}</td>
+          <td>${item.quantity}</td>
+          <td>$${Number(item.price).toFixed(2)}</td>
+          <td>$${(Number(item.price) * item.quantity).toFixed(2)}</td>
+        </tr>
+      `,
+    )
+    .join("");
+
+  invoiceWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Invoice - Order #${order.id}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+          * { box-sizing: border-box; }
+          body {
+            margin: 0;
+            padding: 40px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2937;
+            background: #ffffff;
+          }
+          .invoice {
+            max-width: 820px;
+            margin: 0 auto;
+          }
+          .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #1d4ed8;
+          }
+          h1 { margin: 0; font-size: 30px; color: #1d4ed8; }
+          h2 { margin: 0 0 12px; font-size: 17px; }
+          p { margin: 4px 0; }
+          .muted { color: #64748b; font-size: 13px; }
+          .section { margin-top: 28px; }
+          .payment {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+          }
+          .payment div {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+          }
+          table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+          }
+          th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+          }
+          th { background: #f1f5f9; font-size: 13px; }
+          .right { text-align: right; }
+          .total {
+            margin-top: 18px;
+            display: flex;
+            justify-content: flex-end;
+            font-size: 20px;
+            font-weight: 700;
+          }
+          .footer {
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+          }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <main class="invoice">
+          <div class="header">
+            <div>
+              <h1>Invoice</h1>
+              <p class="muted">Online Shop</p>
+            </div>
+            <div class="right">
+              <p><strong>Order #${order.id}</strong></p>
+              <p class="muted">${new Date().toLocaleDateString()}</p>
+            </div>
+          </div>
+
+          <section class="section">
+            <h2>Products Ordered</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+            <div class="total">Order Total: $${Number(order.totalAmount).toFixed(2)}</div>
+          </section>
+
+          <section class="section">
+            <h2>Payment Information</h2>
+            <div class="payment">
+              <div><span class="muted">Payment Method</span><br /><strong>${paymentMethod}</strong></div>
+              <div><span class="muted">Payment Status</span><br /><strong>${paymentStatus}</strong></div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Delivery Address</h2>
+            <p>${order.address?.street ?? "N/A"}</p>
+            ${order.address?.city ? `<p>${order.address.city}</p>` : ""}
+            ${order.address?.postalCode ? `<p>${order.address.postalCode}</p>` : ""}
+            ${order.address?.country ? `<p>${order.address.country}</p>` : ""}
+          </section>
+
+          <div class="footer">Thank you for your order.</div>
+        </main>
+      </body>
+    </html>
+  `);
+
+  invoiceWindow.document.close();
+  invoiceWindow.focus();
+  invoiceWindow.onload = () => {
+    invoiceWindow.print();
+  };
+};
+
 export default function OrderDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -74,12 +237,22 @@ export default function OrderDetails() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-5xl space-y-6 p-6">
-        <Link
-          to="/orders"
-          className="inline-flex items-center text-sm font-semibold text-gray-600 transition hover:text-brand-700"
-        >
-          ← Back to Orders
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link
+            to="/orders"
+            className="inline-flex items-center text-sm font-semibold text-gray-600 transition hover:text-brand-700"
+          >
+            ← Back to Orders
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => printInvoice(order)}
+            className="inline-flex w-fit items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+          >
+            🖨 Print Invoice
+          </button>
+        </div>
 
         <div className="flex flex-col justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-md sm:flex-row sm:items-center">
           <div>
