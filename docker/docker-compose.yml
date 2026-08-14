@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: onlineshop-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: onlineshop
+      POSTGRES_USER: shopuser
+      POSTGRES_PASSWORD: shoppassword
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - onlineshop-postgres-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopuser -d onlineshop"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+
+    image: onlineshop-backend:dev
+    container_name: onlineshop-backend
+
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: production
+      PORT: 5050
+      DATABASE_URL: postgresql://shopuser:shoppassword@postgres:5432/onlineshop?schema=public
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      FRONTEND_URL: http://localhost:5173
+
+    ports:
+      - "5050:5050"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  onlineshop-postgres-data:

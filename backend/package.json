@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node --files src/server.ts"
+    "dev": "nodemon --exec ts-node --files src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
