@@ -46,5 +46,21 @@ services:
       postgres:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+
+    image: onlineshop-frontend:dev
+    container_name: onlineshop-frontend
+
+    restart: unless-stopped
+
+    ports:
+      - "5173:5173"
+
+    depends_on:
+      - backend
+
 volumes:
   onlineshop-postgres-data:
