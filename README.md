@@ -28,7 +28,6 @@ The application allows users to:
 - Place orders
 - Complete payments
 
-
 Administrators can:
 
 - Manage users
@@ -36,61 +35,609 @@ Administrators can:
 - Manage categories
 - Manage application data
 
-
 The project is being developed following scalable backend architecture and production deployment practices.
 
 ---
 
 # 🏗 System Architecture
 
-## Current Development Architecture
+## Current Full-Stack Docker Architecture
 
 ```
-                Client Application
-                       |
-                       |
-                  REST API
-                       |
-                       |
-              Express.js Backend
-                       |
-                       |
-                Prisma ORM
-                       |
-                       |
-          PostgreSQL Docker Container
+Browser
+    |
+    v
+Frontend Container
+React + TypeScript + Vite
+Port 5173
+    |
+    v
+Backend Container
+Node.js + Express + TypeScript
+Port 5050
+    |
+    v
+Prisma ORM
+    |
+    v
+PostgreSQL Container
+PostgreSQL 17
+Port 5432
+    |
+    v
+Named Docker Volume
+docker_onlineshop-postgres-data
 ```
 
+## Local Development Architecture
+
+```
+Browser
+    |
+    v
+Frontend - local
+    |
+    v
+Backend - local
+    |
+    v
+PostgreSQL - Docker
+```
 
 ## Future Production Architecture
 
 ```
-                    Users
-
-                      |
-
-                    HTTPS
-
-                      |
-
-              Load Balancer / Gateway
-
-                      |
-
-              Frontend Application
-
-                      |
-
-                 Backend API
-
-                      |
-
-              Kubernetes Cluster
-
-                      |
-
-             PostgreSQL Database
+Users
+    |
+  HTTPS
+    |
+Load Balancer / Gateway
+    |
+Frontend Application
+    |
+Backend API
+    |
+Kubernetes / Cloud Platform
+    |
+Managed PostgreSQL
 ```
+
+---
+
+# 🚀 Getting Started
+
+This project supports both local application development and a complete Docker development environment.
+
+## Prerequisites
+
+- Git
+- Docker Desktop
+- Node.js 22+ for local development
+- npm
+
+## Clone the Repository
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd OnlineShop
+```
+
+## Environment Files
+
+Environment-specific files containing secrets are not committed to Git. The repository provides safe templates:
+
+```text
+backend/.env.example
+frontend/.env.example
+docker/.env.example
+```
+
+Create the local environment files:
+
+```bash
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+cp docker/.env.example docker/.env
+```
+
+Update the copied files with the values required for your environment. Never commit the real `.env` files or secret values.
+
+### Environment file responsibilities
+
+| File | Purpose |
+|---|---|
+| `backend/.env` | Backend server, database connection, frontend URL, and JWT configuration |
+| `frontend/.env` | Vite frontend API URL |
+| `docker/.env` | Secrets and environment values supplied to Docker Compose |
+
+The committed `.env.example` files contain placeholders only and are intended to be copied for each environment.
+
+## Development Modes
+
+### Mode 1 — Local Application + Docker PostgreSQL
+
+Frontend and backend run directly on the development machine. PostgreSQL runs in Docker.
+
+```
+Frontend (local) --> Backend (local) --> PostgreSQL (Docker)
+```
+
+### Mode 2 — Complete Docker Setup
+
+Frontend, backend, and PostgreSQL all run as Docker services.
+
+```
+Browser --> Frontend container --> Backend container --> PostgreSQL container
+```
+
+---
+
+# 💻 Local Development
+
+## Start PostgreSQL in Docker
+
+Run this from the project root:
+
+```bash
+docker compose \
+  --env-file docker/.env \
+  -f docker/docker-compose.yml \
+  up -d postgres
+```
+
+Check the database container:
+
+```bash
+docker compose \
+  --env-file docker/.env \
+  -f docker/docker-compose.yml \
+  ps
+```
+
+PostgreSQL should eventually show `healthy`.
+
+## Start the Backend Locally
+
+```bash
+cd backend
+npm install
+npx prisma migrate dev
+npm run dev
+```
+
+The backend runs on:
+
+```text
+http://localhost:5050
+```
+
+Health check:
+
+```bash
+curl http://localhost:5050/health
+```
+
+Swagger/OpenAPI:
+
+```text
+http://localhost:5050/api-docs
+```
+
+## Start the Frontend Locally
+
+In another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend runs on:
+
+```text
+http://localhost:5173
+```
+
+## Prisma Studio with Docker PostgreSQL
+
+Prisma Studio runs on the development machine while connecting to the PostgreSQL database exposed by Docker.
+
+```bash
+cd backend
+npx prisma studio
+```
+
+Open:
+
+```text
+http://localhost:5555
+```
+
+Prisma Studio is not required to run as a Docker container for this development workflow.
+
+---
+
+# 🐳 Complete Docker Setup
+
+All application services can be run through Docker Compose.
+
+## 1. Validate the Compose Configuration
+
+From the project root:
+
+```bash
+docker compose \
+  --env-file docker/.env \
+  -f docker/docker-compose.yml \
+  config
+```
+
+## 2. Build the Images
+
+```bash
+docker compose \
+  --env-file docker/.env \
+  -f docker/docker-compose.yml \
+  build
+```
+
+This builds:
+
+- `onlineshop-frontend:dev`
+- `onlineshop-backend:dev`
+
+PostgreSQL uses the official `postgres:17` image.
+
+## 3. Start All Services
+
+```bash
+docker compose \
+  --env-file docker/.env \
+  -f docker/docker-compose.yml \
+  up -d
+```
+
+## 4. Verify Containers
+
+```bash
+docker compose \
+  --env-file docker/.env \
+  -f docker/docker-compose.yml \
+  ps
+```
+
+Expected services:
+
+| Service | Container | Host Port |
+|---|---|---:|
+| Frontend | `onlineshop-frontend` | `5173` |
+| Backend | `onlineshop-backend` | `5050` |
+| PostgreSQL | `onlineshop-postgres` | `5432` |
+
+PostgreSQL should report `healthy`.
+
+## 5. Verify the Backend
+
+```bash
+curl http://localhost:5050/health
+```
+
+Expected response:
+
+```json
+{"message":"Online Shop API is running"}
+```
+
+## 6. Open the Application
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+Backend:
+
+```text
+http://localhost:5050
+```
+
+Swagger:
+
+```text
+http://localhost:5050/api-docs
+```
+
+---
+
+# 🧱 Docker Architecture
+
+```
+Host Machine
+     |
+     +-----------------------------+
+     |                             |
+     v                             v
+Frontend :5173                 Backend :5050
+React/Vite                  Node/Express
+     |                             |
+     +-------------+---------------+
+                   |
+                   v
+            PostgreSQL :5432
+                   |
+                   v
+     docker_onlineshop-postgres-data
+```
+
+Docker Compose provides the service network, container configuration, healthcheck, port mappings, and PostgreSQL persistent volume.
+
+### Container networking
+
+Inside the Docker Compose network, the backend connects to PostgreSQL using the service name:
+
+```text
+postgres
+```
+
+It must not use `localhost` for the PostgreSQL connection from inside the backend container.
+
+From the host machine, PostgreSQL is available through:
+
+```text
+localhost:5432
+```
+
+---
+
+# 📁 Docker Files
+
+```text
+docker/
+├── docker-compose.yml
+└── .env.example
+
+backend/
+├── Dockerfile
+└── .env.example
+
+frontend/
+├── Dockerfile
+└── .env.example
+```
+
+### `docker/docker-compose.yml`
+
+Defines the application services, networking, environment configuration, healthchecks, port mappings, and PostgreSQL persistent volume.
+
+### `backend/Dockerfile`
+
+Builds the TypeScript backend application and prepares the Prisma client and production runtime.
+
+### `frontend/Dockerfile`
+
+Builds the React/Vite frontend container.
+
+---
+
+# 🔄 Docker Lifecycle Commands
+
+Start all services:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d
+```
+
+Stop containers and remove the Compose network:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml down
+```
+
+`down` removes containers and the network but does **not** remove the PostgreSQL named volume.
+
+Rebuild images:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml build
+```
+
+Force recreate containers:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --force-recreate
+```
+
+View all logs:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml logs -f
+```
+
+View backend logs:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml logs -f backend
+```
+
+View frontend logs:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml logs -f frontend
+```
+
+View PostgreSQL logs:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml logs -f postgres
+```
+
+Check service status:
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml ps
+```
+
+List the PostgreSQL volume:
+
+```bash
+docker volume ls | grep onlineshop
+```
+
+### Delete the development database volume
+
+Only do this intentionally when you want to destroy the PostgreSQL data:
+
+```bash
+docker volume rm docker_onlineshop-postgres-data
+```
+
+**Warning:** deleting the volume permanently removes the database data stored in it.
+
+---
+
+# 🗄 PostgreSQL Persistence
+
+PostgreSQL data is stored in the named Docker volume:
+
+```text
+docker_onlineshop-postgres-data
+```
+
+Therefore:
+
+```text
+docker compose down
+        |
+        +--> containers removed
+        +--> network removed
+        +--> database volume retained
+```
+
+A new machine does not contain the old database volume. Cloning the Git repository only provides the application source code and migration history, not the database data.
+
+If an existing database must be moved to another machine, use a database backup/restore process rather than Git.
+
+---
+
+# 🔷 Prisma and Database Migrations
+
+Prisma schema and migration history are stored under:
+
+```text
+backend/prisma/
+├── schema.prisma
+└── migrations/
+    └── <migration_timestamp>_<migration_name>/
+        └── migration.sql
+```
+
+## Development
+
+When the Prisma schema changes, create and apply a migration:
+
+```bash
+cd backend
+npx prisma migrate dev --name <migration_name>
+```
+
+Check migration status:
+
+```bash
+npx prisma migrate status
+```
+
+`prisma migrate dev` is intended for development environments.
+
+## Staging / Production
+
+Apply committed migrations with:
+
+```bash
+npx prisma migrate deploy
+```
+
+`migrate deploy` is intended for non-development environments and should normally be part of the deployment/CI/CD process.
+
+## Migration History
+
+Migration files are part of the project's source-controlled database history and should be committed to Git. Do **not** delete or rewrite previously committed migrations simply because a newer migration supersedes them.
+
+## Prisma Studio
+
+For database inspection during development:
+
+```bash
+cd backend
+npx prisma studio
+```
+
+---
+
+# 🆕 New Machine — Full Setup
+
+Follow these steps after cloning the repository onto a new computer:
+
+1. Install Git and Docker Desktop.
+2. Install Node.js 22+ if local development will be used.
+3. Clone the repository.
+4. Enter the project directory.
+5. Create `backend/.env`, `frontend/.env`, and `docker/.env` from their `.env.example` files.
+6. Add environment-specific values and secrets locally.
+7. Start Docker Desktop.
+8. Validate the Compose configuration.
+9. Build the Docker images.
+10. Start all Docker services.
+11. Check the containers with `docker compose ps`.
+12. Confirm PostgreSQL is `healthy`.
+13. Run the backend health check.
+14. Open `http://localhost:5173`.
+15. Optionally start Prisma Studio.
+
+Example:
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd OnlineShop
+
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+cp docker/.env.example docker/.env
+
+docker compose --env-file docker/.env -f docker/docker-compose.yml config
+docker compose --env-file docker/.env -f docker/docker-compose.yml build
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d
+docker compose --env-file docker/.env -f docker/docker-compose.yml ps
+
+curl http://localhost:5050/health
+```
+
+The repository does not contain production secrets or database data. A fresh machine therefore creates a new PostgreSQL volume and database environment.
+
+---
+
+# 🔐 Git and Secrets
+
+Real `.env` files must remain untracked:
+
+```text
+backend/.env
+frontend/.env
+docker/.env
+```
+
+The following template files are intended to be committed:
+
+```text
+backend/.env.example
+frontend/.env.example
+docker/.env.example
+```
+
+Never replace placeholder values in `.env.example` files with real credentials.
+
+Docker Compose is explicitly invoked with `--env-file docker/.env` so the project uses the intended environment-specific configuration. Docker Compose supports supplying an alternative environment file through `--env-file`.
 
 ---
 
@@ -101,17 +648,16 @@ The project is being developed following scalable backend architecture and produ
 | Component | Technology |
 |---|---|
 | Programming Language | TypeScript |
-| Runtime | Node.js |
+| Runtime | Node.js 22 |
 | Framework | Express.js |
 | API Architecture | REST API |
-| Database | PostgreSQL |
+| Database | PostgreSQL 17 |
 | Database ORM | Prisma |
 | Authentication | JWT |
 | Password Security | bcrypt |
 | Documentation | Swagger/OpenAPI |
 | Package Manager | npm |
 | Version Control | Git |
-
 
 ---
 
@@ -127,7 +673,6 @@ Benefits:
 - Better maintainability
 - Early error detection
 - Improved developer experience
-
 
 Example:
 
@@ -150,7 +695,6 @@ Responsibilities:
 - Manage asynchronous operations
 - Run Express server
 
-
 ---
 
 # Express.js
@@ -164,14 +708,11 @@ Responsibilities:
 - Request/response processing
 - API development
 
-
 Example API:
 
 ```
 GET    /api/products
-
 POST   /api/users/register
-
 PATCH  /api/users/:id/role
 ```
 
@@ -187,15 +728,10 @@ The application contains relational data such as:
 
 ```
 Users
-
 Products
-
 Categories
-
 Cart
-
 Orders
-
 Payments
 ```
 
@@ -205,48 +741,6 @@ A relational database is suitable because:
 - Transactions are required
 - Data consistency is critical
 - E-commerce systems require structured data
-
-
----
-
-# Docker PostgreSQL
-
-During development PostgreSQL runs inside a Docker container.
-
-Architecture:
-
-```
-Developer Machine
-
-        |
-
-      Docker
-
-        |
-
- PostgreSQL Container
-
-        |
-
- Database Storage
-```
-
-
-Benefits:
-
-- Consistent development environment
-- Easy setup
-- Same database version for all developers
-- Easy migration to cloud environments
-
-
-Instead of manually installing PostgreSQL:
-
-```bash
-docker compose up
-```
-
-starts the database environment.
 
 ---
 
@@ -268,14 +762,12 @@ Express Controller
     PostgreSQL
 ```
 
-
 Prisma provides:
 
 - Type-safe database queries
 - Database schema management
 - Migration support
 - Easier database operations
-
 
 Example:
 
@@ -287,7 +779,6 @@ FROM users
 WHERE email='user@test.com';
 ```
 
-
 With Prisma:
 
 ```typescript
@@ -297,7 +788,6 @@ prisma.user.findUnique({
  }
 })
 ```
-
 
 Prisma converts application queries into SQL.
 
@@ -339,47 +829,40 @@ Response
 
 # Backend Folder Structure
 
-```
+```text
 backend
-
 │
 ├── prisma
+│   ├── migrations
 │   └── schema.prisma
 │
 ├── src
-│
-├── config
-│   └── swagger.ts
-│
-├── controllers
-│
-│   ├── user.controller.ts
-│   ├── product.controller.ts
-│   ├── category.controller.ts
-│   ├── cart.controller.ts
-│   ├── order.controller.ts
-│   └── payment.controller.ts
-│
-├── middleware
-│
-│   ├── auth.middleware.ts
-│   └── role.middleware.ts
-│
-├── routes
-│
-│   ├── user.routes.ts
-│   ├── product.routes.ts
-│   ├── category.routes.ts
-│   ├── cart.routes.ts
-│   ├── order.routes.ts
-│   └── payment.routes.ts
+│   ├── config
+│   │   └── swagger.ts
+│   ├── controllers
+│   │   ├── user.controller.ts
+│   │   ├── product.controller.ts
+│   │   ├── category.controller.ts
+│   │   ├── cart.controller.ts
+│   │   ├── order.controller.ts
+│   │   └── payment.controller.ts
+│   ├── middleware
+│   │   ├── auth.middleware.ts
+│   │   └── role.middleware.ts
+│   ├── routes
+│   │   ├── user.routes.ts
+│   │   ├── product.routes.ts
+│   │   ├── category.routes.ts
+│   │   ├── cart.routes.ts
+│   │   ├── order.routes.ts
+│   │   └── payment.routes.ts
+│   └── server.ts
 │
 ├── .env.example
-├── .env
 ├── package.json
 ├── package-lock.json
-├── tsconfig.json
-└── server.ts
+├── prisma.config.ts
+└── tsconfig.json
 ```
 
 ---
@@ -396,7 +879,6 @@ Responsibilities:
 - Load middleware
 - Register routes
 - Start server
-
 
 ---
 
@@ -416,7 +898,6 @@ Routes decide:
 - Which middleware executes
 - Which controller handles request
 
-
 ---
 
 ## Controllers
@@ -430,7 +911,6 @@ Responsibilities:
 - Call database layer
 - Return response
 
-
 ---
 
 ## Middleware
@@ -442,7 +922,6 @@ Used for:
 - Authentication
 - Authorization
 - Validation
-
 
 Example:
 
@@ -496,7 +975,6 @@ Send Token With Requests
 Backend Verifies Token
 ```
 
-
 Protected requests:
 
 ```
@@ -517,7 +995,6 @@ Incorrect:
 password123
 ```
 
-
 Database stores:
 
 ```
@@ -530,13 +1007,11 @@ Example:
 $2b$10$xxxxxxxxxxxxx
 ```
 
-
 bcrypt provides:
 
 - One-way hashing
 - Salt generation
 - Protection against password leaks
-
 
 ---
 
@@ -551,7 +1026,6 @@ Swagger provides:
 - Required fields
 - Authentication testing
 - Response documentation
-
 
 Access:
 
@@ -593,7 +1067,6 @@ Completed:
 
 ✅ Swagger API documentation
 
-
 ---
 
 # Example API Endpoints
@@ -621,18 +1094,15 @@ POST /api/categories
 
 ---
 
-# Frontend Roadmap
+# Frontend
 
-Frontend development will include:
-
-Technology:
+The frontend is implemented using:
 
 - React
 - TypeScript
-- Modern UI framework
+- Vite
 
-
-Features:
+Current features include:
 
 - User interface
 - Product browsing
@@ -642,56 +1112,11 @@ Features:
 - Order history
 - Admin dashboard
 
-
 Frontend documentation:
 
 ```
 frontend/README.md
 ```
-
----
-
-# Docker Deployment Roadmap
-
-Future container architecture:
-
-```
-Source Code
-
-      |
-
-Docker Build
-
-      |
-
-Docker Image
-
-      |
-
-Container Registry
-
-      |
-
-Deployment Environment
-```
-
-Planned:
-
-- Backend Docker image
-- Frontend Docker image
-- Database container
-- Docker Compose environment
-
-Docker Compose
-
-Responsible for:
-
-- Creating PostgreSQL container
-- Managing database configuration
-- Setting environment variables
-- Providing a consistent development environment
-- Managing persistent database storage
-
 
 ---
 

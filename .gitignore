@@ -1,5 +1,31 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables / secrets
 .env
-dist
-._*
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+
+# macOS
 .DS_Store
+._*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# OS / temporary files
+*.tmp
+*.swp
