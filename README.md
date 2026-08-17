@@ -975,13 +975,8 @@ frontend/
     │   └── userApi.ts
     │
     ├── components/
-    │   ├── CartItem.tsx
-    │   ├── ErrorMessage.tsx
     │   ├── Footer.tsx
     │   ├── Header.tsx
-    │   ├── Loading.tsx
-    │   ├── ProductCard.tsx
-    │   ├── ProductGrid.tsx
     │   └── common/
     │
     ├── context/
