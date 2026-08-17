@@ -827,45 +827,234 @@ Response
 
 ---
 
-# Backend Folder Structure
+# 📁 Project Structure
+
+The repository is organized into separate backend, frontend, Docker, database, documentation, and future Kubernetes areas.
 
 ```text
-backend
+OnlineShop/
+├── backend/                 # Node.js / Express backend
+│   ├── prisma/              # Prisma schema and database migrations
+│   └── src/                 # Backend application source
+│       ├── config/          # Environment, database and Swagger configuration
+│       ├── controllers/     # HTTP request handlers
+│       ├── middleware/      # Authentication, authorization and upload middleware
+│       ├── routes/          # REST API routes
+│       ├── services/        # Application and business logic
+│       └── types/           # TypeScript type declarations
 │
-├── prisma
-│   ├── migrations
-│   └── schema.prisma
+├── frontend/                # React / TypeScript / Vite frontend
+│   ├── public/              # Static frontend assets
+│   └── src/                 # Frontend application source
+│       ├── api/             # Backend API clients
+│       ├── components/      # Reusable UI components
+│       ├── context/         # React application context
+│       ├── hooks/           # Custom React hooks
+│       ├── layouts/         # Customer and admin layouts
+│       ├── pages/           # Customer and admin pages
+│       ├── routes/          # Frontend routing and route protection
+│       ├── store/           # Client-side application state
+│       ├── types/           # TypeScript models and types
+│       └── utils/           # Shared frontend utilities
 │
-├── src
-│   ├── config
-│   │   └── swagger.ts
-│   ├── controllers
-│   │   ├── user.controller.ts
-│   │   ├── product.controller.ts
-│   │   ├── category.controller.ts
-│   │   ├── cart.controller.ts
-│   │   ├── order.controller.ts
-│   │   └── payment.controller.ts
-│   ├── middleware
-│   │   ├── auth.middleware.ts
-│   │   └── role.middleware.ts
-│   ├── routes
-│   │   ├── user.routes.ts
-│   │   ├── product.routes.ts
-│   │   ├── category.routes.ts
-│   │   ├── cart.routes.ts
-│   │   ├── order.routes.ts
-│   │   └── payment.routes.ts
-│   └── server.ts
+├── docker/                  # Docker Compose configuration
+│   ├── docker-compose.yml
+│   └── .env.example
 │
-├── .env.example
-├── package.json
-├── package-lock.json
-├── prisma.config.ts
-└── tsconfig.json
+├── kubernetes/              # Future Kubernetes manifests
+├── docs/                    # Project documentation
+├── database/                # Database-related resources
+├── README.md
+└── .gitignore
 ```
 
----
+## Backend Folder Structure
+
+```text
+backend/
+├── prisma/
+│   ├── migrations/
+│   │   ├── 20260817184228_initial_schema/
+│   │   │   └── migration.sql
+│   │   └── migration_lock.toml
+│   └── schema.prisma
+│
+└── src/
+    ├── app.ts
+    ├── server.ts
+    ├── config/
+    │   ├── database.ts
+    │   ├── env.ts
+    │   └── swagger.ts
+    ├── controllers/
+    │   ├── address.controller.ts
+    │   ├── auth.controller.ts
+    │   ├── cart.controller.ts
+    │   ├── category.controller.ts
+    │   ├── order.controller.ts
+    │   ├── payment.controller.ts
+    │   ├── product.controller.ts
+    │   └── user.controller.ts
+    ├── middleware/
+    │   ├── auth.middleware.ts
+    │   ├── role.middleware.ts
+    │   └── upload.middleware.ts
+    ├── routes/
+    │   ├── address.routes.ts
+    │   ├── auth.routes.ts
+    │   ├── cart.routes.ts
+    │   ├── category.routes.ts
+    │   ├── order.routes.ts
+    │   ├── payment.routes.ts
+    │   ├── product.routes.ts
+    │   └── user.routes.ts
+    ├── services/
+    │   ├── address.service.ts
+    │   ├── auth.service.ts
+    │   ├── cart.service.ts
+    │   ├── category.service.ts
+    │   ├── order.service.ts
+    │   ├── payment.service.ts
+    │   ├── product.service.ts
+    │   └── user.service.ts
+    └── types/
+        └── express.d.ts
+```
+
+### Backend request flow
+
+```text
+HTTP Request
+     ↓
+Route
+     ↓
+Middleware
+     ↓
+Controller
+     ↓
+Service
+     ↓
+Prisma Client
+     ↓
+PostgreSQL
+     ↓
+HTTP Response
+```
+
+### Backend directory responsibilities
+
+| Directory | Responsibility |
+|---|---|
+| `src/config` | Application configuration, environment validation, database setup and Swagger configuration |
+| `src/routes` | Defines REST API endpoints and connects routes to middleware/controllers |
+| `src/controllers` | Handles HTTP requests, input handling and HTTP responses |
+| `src/services` | Contains application and business logic and database operations through Prisma |
+| `src/middleware` | Authentication, authorization and file-upload processing |
+| `src/types` | TypeScript type declarations used by the backend |
+| `prisma` | Database schema, Prisma configuration and migration history |
+| `uploads` | Application-uploaded product images during development |
+
+# Frontend Folder Structure
+
+```text
+frontend/
+├── public/
+│   ├── favicon.svg
+│   └── icons.svg
+│
+└── src/
+    ├── api/
+    │   ├── addressApi.ts
+    │   ├── authApi.ts
+    │   ├── axios.ts
+    │   ├── cartApi.ts
+    │   ├── categoryApi.ts
+    │   ├── orderApi.ts
+    │   ├── paymentApi.ts
+    │   ├── productApi.ts
+    │   └── userApi.ts
+    │
+    ├── components/
+    │   ├── CartItem.tsx
+    │   ├── ErrorMessage.tsx
+    │   ├── Footer.tsx
+    │   ├── Header.tsx
+    │   ├── Loading.tsx
+    │   ├── ProductCard.tsx
+    │   ├── ProductGrid.tsx
+    │   └── common/
+    │
+    ├── context/
+    │
+    ├── hooks/
+    │   ├── useAddresses.ts
+    │   ├── useAuth.ts
+    │   ├── useCart.ts
+    │   ├── useCategories.ts
+    │   ├── useOrders.ts
+    │   ├── usePayments.ts
+    │   └── useProducts.ts
+    │
+    ├── layouts/
+    │   ├── AdminLayout.tsx
+    │   └── MainLayout.tsx
+    │
+    ├── pages/
+    │   ├── Cart.tsx
+    │   ├── Categories.tsx
+    │   ├── Checkout.tsx
+    │   ├── Home.tsx
+    │   ├── Login.tsx
+    │   ├── OrderDetails.tsx
+    │   ├── Orders.tsx
+    │   ├── ProductDetails.tsx
+    │   ├── Products.tsx
+    │   ├── Profile.tsx
+    │   ├── Register.tsx
+    │   └── admin/
+    │       ├── Dashboard.tsx
+    │       ├── OrdersManagement.tsx
+    │       ├── PaymentsManagement.tsx
+    │       ├── ProductsManagement.tsx
+    │       └── UsersManagement.tsx
+    │
+    ├── routes/
+    │   ├── ProtectedRoute.tsx
+    │   └── index.tsx
+    │
+    ├── store/
+    │   └── authStore.ts
+    │
+    ├── types/
+    │   ├── auth.types.ts
+    │   ├── cart.types.ts
+    │   ├── category.types.ts
+    │   ├── order.types.ts
+    │   ├── payment.types.ts
+    │   ├── product.types.ts
+    │   └── user.types.ts
+    │
+    ├── utils/
+    ├── App.tsx
+    ├── index.css
+    └── main.tsx
+```
+
+### Frontend directory responsibilities
+
+| Directory | Responsibility |
+|---|---|
+| `src/api` | Axios configuration and API modules used to communicate with the backend |
+| `src/components` | Reusable UI components shared across pages |
+| `src/context` | React context providers and shared contextual state |
+| `src/hooks` | Reusable React hooks for application features |
+| `src/layouts` | Shared customer and administrator page layouts |
+| `src/pages` | Customer-facing application pages and admin portal pages |
+| `src/routes` | Frontend routes and protected-route handling |
+| `src/store` | Client-side application state such as authentication state |
+| `src/types` | TypeScript interfaces and application data models |
+| `src/utils` | Shared frontend utility functions |
+| `public` | Static assets served by the Vite frontend |
 
 # Backend Components
 
