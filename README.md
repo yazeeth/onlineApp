@@ -1264,7 +1264,7 @@ Authentication:
 
 ```
 POST /api/users/register
-POST /api/users/login
+POST /api/auth/login
 ```
 
 Products:
