@@ -22,13 +22,8 @@ services:
       retries: 5
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-
-    image: onlineshop-backend:dev
+    image: yazeeth/onlineshop-backend:1.0.0
     container_name: onlineshop-backend
-
     restart: unless-stopped
 
     environment:
@@ -47,13 +42,8 @@ services:
         condition: service_healthy
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-
-    image: onlineshop-frontend:dev
+    image: yazeeth/onlineshop-frontend:1.0.0
     container_name: onlineshop-frontend
-
     restart: unless-stopped
 
     environment:
