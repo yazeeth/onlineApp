@@ -330,7 +330,7 @@ export default function ProductsManagement() {
             onClick={() => navigate("/admin")}
             className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-6 py-3 text-base font-bold text-[var(--text-accent)] shadow-sm transition hover:border-[var(--brand-accent)] hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)] sm:w-auto"
           >
-            ← Dashboard
+            ← Back to Dashboard
           </button>
           <button
             type="button"
