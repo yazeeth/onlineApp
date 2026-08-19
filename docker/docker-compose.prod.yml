@@ -22,7 +22,7 @@ services:
       retries: 5
 
   backend:
-    image: yazeeth/onlineshop-backend:1.0.0
+    image: yazeeth/onlineshop-backend:${BACKEND_VERSION}
     container_name: onlineshop-backend
     restart: unless-stopped
 
@@ -42,7 +42,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: yazeeth/onlineshop-frontend:1.0.0
+    image: yazeeth/onlineshop-frontend:${FRONTEND_VERSION}
     container_name: onlineshop-frontend
     restart: unless-stopped
 
