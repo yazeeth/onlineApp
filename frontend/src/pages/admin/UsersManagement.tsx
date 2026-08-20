@@ -282,7 +282,7 @@ export default function UsersManagement() {
             onClick={() => window.history.back()}
             className="inline-flex w-fit items-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-bold text-[var(--text-accent)] shadow-sm transition hover:border-[var(--brand-accent)] hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)]"
           >
-            ← Back
+            ← Back to Dashboard
           </button>
         </div>
 
